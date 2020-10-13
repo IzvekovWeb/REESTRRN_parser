@@ -10,6 +10,7 @@ class News {
     public $title;
     public $description;
     public $link;
+    public $site_link;
     public $time;
 
     // конструктор для соединения с базой данных 
@@ -39,20 +40,23 @@ class News {
       $query = "INSERT INTO
                   " . $this->table_name . "
               SET
-                  title = :title, link = :link, description = :description, img_link = :img_link, time = :time";
+                  title = :title, link = :link, description = :description, site_link = :site_link, time = :time";
 
       // подготовка запроса 
       $stmt = $this->conn->prepare($query);
+
       // очистка 
       $this->title=htmlspecialchars(strip_tags($this->title));
       $this->link=htmlspecialchars(strip_tags($this->link));
       $this->description=htmlspecialchars(strip_tags($this->description));
+      $this->site_link=htmlspecialchars(strip_tags($this->site_link));
       $this->time=htmlspecialchars(strip_tags($this->time));
  
       // привязка значений 
       $stmt->bindParam(":title", $this->title);
       $stmt->bindParam(":link", $this->link);
       $stmt->bindParam(":description", $this->description); 
+      $stmt->bindParam(":site_link", $this->site_link); 
       $stmt->bindParam(":time", $this->time);
 
       // выполняем запрос 
@@ -159,7 +163,7 @@ class News {
     }
 
     // метод search - поиск товаров 
-    function search($keywords){
+    function search($keywords){ 
 
         // выборка по всем записям 
         $query = "SELECT
@@ -168,26 +172,29 @@ class News {
                     " . $this->table_name . " 
                    
                 WHERE
-                    title LIKE ? OR description LIKE ?
+                    (title LIKE ? OR description LIKE ?) AND time LIKE ?
                 ORDER BY
-                    create DESC";
+                    time DESC";
 
         // подготовка запроса 
         $stmt = $this->conn->prepare($query);
-
+ 
         // очистка 
-        $keywords=htmlspecialchars(strip_tags($keywords));
-        $keywords = "%{$keywords}%";
+        foreach ($keywords as $keyword) {
+            $keyword = htmlspecialchars(strip_tags($keyword));
+            $keyword = "%{$keyword}%";
+        } 
+
 
         // привязка 
-        $stmt->bindParam(1, $keywords);
-        $stmt->bindParam(2, $keywords);
-        $stmt->bindParam(3, $keywords);
+        $stmt->bindParam(1, $keywords['title']);
+        $stmt->bindParam(2, $keywords['description']);
+        $stmt->bindParam(3, $keywords['time']);
 
         // выполняем запрос 
-        $stmt->execute();
+        $stmt->execute(); 
 
-        return $stmt;
+       return $stmt;
     }
 }
 ?>

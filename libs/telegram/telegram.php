@@ -41,6 +41,7 @@ class Telegram {
         foreach ($el['keywords'] as $key){
             $message .= $key . " ";
         }
+        $message .= "<b>Время:</b>" . $el['time'] . PHP_EOL . PHP_EOL;
         $message .= PHP_EOL . PHP_EOL;
         $message .= '============================' . PHP_EOL . PHP_EOL;
       }

@@ -33,9 +33,10 @@ if (
     $files = (Object)$files;
 
     // устанавливаем значения свойств товара 
-    $news->name = $data->title;
+    $news->title = $data->title;
     $news->link = $data->link;
     $news->description = $data->description;
+    $news->site_link = $data->site_link;
     $news->time = $data->time;
 
     // создание новости \ добавление в БД 

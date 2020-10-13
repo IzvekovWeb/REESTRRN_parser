@@ -22,56 +22,33 @@ $keywords = Array (
     'time'          => isset($_POST["time"]) ? $_POST["time"] : "",
 );
 
-
 // Не более 3х параметров
 if ( count($keywords) > 3 ) {
-    
     // код ответа - 400 неверный запрос
     http_response_code(400);
-
     echo json_encode(false, JSON_UNESCAPED_UNICODE);
-}
-
+} 
 
 // запрос товаров 
 $stmt = $news->search($keywords);
 $num = $stmt->rowCount();
+ 
 
 // проверяем, найдено ли больше 0 записей 
 if ($num>0) {
-
-    // массив товаров 
-    $news_arr=array();
-    $news_arr["records"]=array();
-
-    // получаем содержимое нашей таблицы 
-    // fetch() быстрее чем fetchAll() 
-    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
-        // извлечём строку 
-        extract($row);
-
-        $news_item=array(
-            "id" => $id,
-            "title" => $title,
-            "description" => html_entity_decode($description),
-            "site_link" => $site_link,
-            "time" => $time
-        );
-
-        array_push($news_arr["records"], $news_item);
-    }
 
     // код ответа - 200 OK 
     http_response_code(200);
 
     // покажем товары 
-    echo json_encode($news_arr, JSON_UNESCAPED_UNICODE);
+    echo json_encode(true, JSON_UNESCAPED_UNICODE);
 }
 
 else {
     // код ответа - 404 Ничего не найдено 
     http_response_code(404);
 
-    echo json_encode(array("message" => "Товары не найдены."), JSON_UNESCAPED_UNICODE);
+    // скажем пользователю, что товары не найдены 
+    echo json_encode(false, JSON_UNESCAPED_UNICODE);
 }
 ?>
