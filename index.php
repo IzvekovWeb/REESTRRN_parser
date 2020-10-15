@@ -3,13 +3,14 @@
 error_reporting(E_ALL);
 ini_set("display_errors", 1); 
 
+require('functions.php');
 require('libs/phpQuery/phpQuery.php');
 require('libs/telegram/telegram.php');
 require('parsers/SiteParser.php');
 
 $t_bot = new Telegram();
 
-// for ($i = 0; $i < 5; $i++) {
+for ($i = 0; $i < 6; $i++) {
 
   $result = start(); 
 
@@ -45,8 +46,8 @@ $t_bot = new Telegram();
     echo $result['error'];
   }
 
-  // sleep(10);
-// }
+  sleep(10);
+}
 
 
 function start(){
@@ -58,8 +59,11 @@ function start(){
     'businesswire.com'  => 'https://www.businesswire.com/portal/site/home/news/',
     'globenewswire.com' => 'https://www.globenewswire.com/Index',
   ];
-  $words = ['acquire','tender', 'COVID', 'Technology'];
-  $companies = ['nike', 'macerich', 'tesla', 'apple'];
+  $words = [
+    'acquire','agreed to buy', 'reports preliminary', 'expecting record performance',
+    'Acquire','Agreed To Buy', 'Reports Preliminary', 'Expecting Record Performance',
+];
+  $companies = ['Nike', 'Macerich', 'Tesla', 'Apple'];
   $keywords = array_merge($words, $companies);
   // -------------------------
   
@@ -90,60 +94,8 @@ function start(){
   return $parced_news;
 }
 
-function add_news_bd($news){
-
-  // Добавление новости в БД
-  $add_news_bd = curl_init();
-  curl_setopt_array($add_news_bd, array(
-      CURLOPT_URL => 'https://sasha-izvekov.ru/newsparser/api/news/create.php',
-      CURLOPT_RETURNTRANSFER => true,
-      CURLOPT_POST => true,
-      CURLOPT_POSTFIELDS => http_build_query(array(
-        'title'       => $news['title'],
-        'description' => $news['desc'],
-        'site_link'   => $news['site_url'],
-        'link'        => $news['link'],
-        'time'        => $news['time'],
-      ))
-  ));
-  $response = curl_exec($add_news_bd);
-  curl_close($add_news_bd);
-
-  return $response;
-
-}
 
 
-function is_news_exist_bd($news){
-
-  // Проверка: ксть ли новости в БД
-  $check_news_bd = curl_init();
-
-  curl_setopt_array($check_news_bd, array(
-      CURLOPT_URL => 'https://sasha-izvekov.ru/newsparser/api/news/is_exists.php',
-      CURLOPT_RETURNTRANSFER => true,
-      CURLOPT_POST => true,
-      CURLOPT_POSTFIELDS => http_build_query(array(
-        'title'       => $news['title'],
-        'description' => $news['desc'],
-        'time'        => $news['time'],
-      ))
-  ));
-  $response = curl_exec($check_news_bd);
-  curl_close($check_news_bd);
-
-  return $response;
-}
-
-
-
-
-
-
-function dump($r){
-  echo "<pre>";
-  var_dump($r);
-  echo "</pre>";
-}  
+ 
 
 ?>
