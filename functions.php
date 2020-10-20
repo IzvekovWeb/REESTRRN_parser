@@ -48,9 +48,9 @@ function is_news_exist_bd($news){
       CURLOPT_RETURNTRANSFER => true,
       CURLOPT_POST => true,
       CURLOPT_POSTFIELDS => http_build_query(array(
-        'title'       => $news['title'],
-        'description' => $news['desc'],
-        'time'        => $news['time'],
+        'title'       => htmlspecialchars(strip_tags($news['title'])),
+        'description' => htmlspecialchars(strip_tags($news['desc'])),
+        'time'        => htmlspecialchars(strip_tags($news['time'])),
       ))
   ));
   $response = curl_exec($check_news_bd);

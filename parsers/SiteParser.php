@@ -11,10 +11,17 @@ class siteParser {
     $this->keywords = $keywords;
   }
 
-  public function parse($document){
+  /*
+  *  Функция: обрабатывает страницу с новостями
+  *  Вход: $document - HTML страница
+           $tags - теги для обработки конкретного сайта (5 элементтов)
+  *  Выход: результат добавления
+  */
+  
+  public function parse($document, $tags){
     
     // Обёртка новостей
-    $articles = $document->find('div.row > div.card');
+    $articles = $document->find($tags['article']);
     $values = Array();
     if (!empty($articles)) {
     
@@ -24,16 +31,20 @@ class siteParser {
 
         // Отбираем нужные данные и заносим в массив
         $article_el = [
-          'title'     => $article->find('h3 > a')->text(),
-          'desc'      => $article->find('p')->text(),
-          'link'      => $this->site . $article->find('h3 > a')->attr('href'),
-          'time'      => $article->find('small')->text(),
+          'title'     => $article->find($tags['title'])->text(),
+          'desc'      => $article->find($tags['desc'])->text(),
+          'link'      => $this->site . $article->find($tags['link'])->attr('href'),
+          'time'      => $article->find($tags['time'])->text(),
           'allow'     => false,
           'keywords'  => [],
           'site_url'  => $this->url,
           'site_name'  => $this->site,
         ]; 
-        
+
+        // echo '<pre>';
+        // var_dump($article_el);
+        // echo '</pre>';
+
         if(!empty($article_el['title']) && !empty($article_el['link'])){
           
           // Проверяем на наличие ключевых слов в заголовке или описании
@@ -56,10 +67,44 @@ class siteParser {
       }
     }
     else{
-      return ['message' => 'На сайте не нашлось подходящих тегов','error' => true, 'result' => $values];
+      return ['message' => 'На сайте не нашлось подходящих тегов ','error' => true, 'result' => $values];
     }
     
-    return ['message' => 'Сайт успешно спарсен','error' => false, 'result' => $values];
+    return ['message' => 'Сайт успешно спарсен ','error' => false, 'result' => $values];
+  }
+
+
+
+    /*
+  *  Функция: возвращает теги для сайта
+  *  Вход: $site_name - название сайта
+  *  Выход: массив с тегами 
+  */
+  public function set_tags($site_name){
+
+    $tags = null;
+
+    if ($site_name == 'prnewswire.com'){ 
+      $tags = [
+        'article' => 'div.row > div.card',
+        'title' => 'h3 > a',
+        'desc' => 'p',
+        'link' => 'h3 > a',
+        'time' => 'small',
+      ]; 
+    }elseif ($site_name == 'businesswire.com'){
+      
+
+    }elseif ($site_name == 'globenewswire.com'){
+      $tags = [
+        'article' => 'div.rl-container > div.results-link',
+        'title' => 'h1.post-title16px > a',
+        'desc' => 'h1.post-title16px + p',
+        'link' => 'h1.post-title16px > a',
+        'time' => 'null',
+      ];
+    }
+    return $tags;
   }
 }
 ?>
