@@ -47,9 +47,10 @@ class siteParser {
           'site_url'  => $this->url,
           'site_name'  => $this->site,
         ]; 
-        echo '<pre>';
-        var_dump($article_el);
-        echo '</pre>';
+
+        // echo '<pre>';
+        // var_dump($article_el);
+        // echo '</pre>';
 
        
 
@@ -117,6 +118,15 @@ class siteParser {
         'title' => 'h1.post-title16px > a',
         'desc' => 'h1.post-title16px + p',
         'link' => 'h1.post-title16px > a',
+        'time' => 'null',
+      ];
+    }
+    elseif ($site_name == 'finance.yahoo.com'){
+      $tags = [
+        'article' => 'div#Fin-Stream > ul > li',
+        'title' => 'h3 > a',
+        'desc' => 'p',
+        'link' => 'h3 > a',
         'time' => 'null',
       ];
     }

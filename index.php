@@ -58,6 +58,7 @@ function start(){
     'globenewswire.com' => 'https://www.globenewswire.com/Index',
     'prnewswire.com'    => 'https://www.prnewswire.com/news-releases/news-releases-list/',
     'businesswire.com'  => 'https://www.businesswire.com/portal/site/home/news/',
+    'finance.yahoo.com' => 'https://finance.yahoo.com/news/',
     
   ];
   $words = [

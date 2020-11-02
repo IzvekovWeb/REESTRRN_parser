@@ -5,8 +5,8 @@ class Telegram {
   const TELEGRAM_TOKEN = '1364265656:AAH7fgfnZE4n3bsaeEFC0PVJoStnYnWVt8M';
 
   // сюда нужно вписать ваш внутренний айдишник
-  const TELEGRAM_CHATID = -465108518; //группа
-  // const TELEGRAM_CHATID = 445743340; // я
+  // const TELEGRAM_CHATID = -465108518; //группа
+  const TELEGRAM_CHATID = 445743340; // я
 
   public static function send_message($text)
   {
