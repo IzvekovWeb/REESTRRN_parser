@@ -10,7 +10,7 @@ require('parsers/SiteParser.php');
 
 $t_bot = new Telegram();
 
-for ($i = 0; $i < 6; $i++) {
+// for ($i = 0; $i < 6; $i++) {
   $start_time =  microtime(true);
 
   $result = start(); 
@@ -46,8 +46,8 @@ for ($i = 0; $i < 6; $i++) {
     echo $result['message'] . PHP_EOL;
   } 
   echo "<br> Парсинг занял: " . round(microtime(true) - $start_time, 4) . " сек.<br>";
-  sleep(10);
-}
+//   sleep(10);
+// }
 
 
 function start(){
@@ -61,9 +61,9 @@ function start(){
     
   ];
   $words = [
-    'acquire','agreed to buy', 'reports preliminary', 'expecting record performance', 'Technology', 'covid', 'global'
+    'acquire','agreed to buy', 'reports preliminary', 'expecting record performance'
   ];
-  $companies = ['Nike', 'Macerich', 'Tesla', 'Apple'];
+  $companies = ['Nike', 'Macerich', 'Tesla'];
   $keywords = array_merge($words, $companies);
   // -------------------------
   
@@ -81,11 +81,12 @@ function start(){
     $parser = new siteParser($site, $url, $keywords);
      
     $tags = $parser->set_tags($site);
-    
-    
+     
+
     if($tags != null) {
 
       $result = $parser->parse($document, $tags);
+      
 
       if(!$result['error']){
         $i = 0;
@@ -96,6 +97,7 @@ function start(){
 
         $result_mas['message']  = 'Хотя бы 1 сайт спарсен успешно';
         $result_mas['error']    = false;
+        
 
       }
       else{

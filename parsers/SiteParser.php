@@ -21,29 +21,37 @@ class siteParser {
   public function parse($document, $tags){
     
     // Обёртка новостей
+ 
+
     $articles = $document->find($tags['article']);
     $values = Array();
     if (!empty($articles)) {
+
+      // echo '<pre>';
+      // var_dump($articles);
+      // echo '</pre>';
     
       foreach($articles as $art){
+       
         
-        $article = pq($art);  
+        $article = pq($art);   
 
         // Отбираем нужные данные и заносим в массив
         $article_el = [
-          'title'     => $article->find($tags['title'])->text(),
-          'desc'      => $article->find($tags['desc'])->text(),
+          'title'     => trim($article->find($tags['title'])->text()),
+          'desc'      => trim($article->find($tags['desc'])->text()),
           'link'      => $this->site . $article->find($tags['link'])->attr('href'),
-          'time'      => $article->find($tags['time'])->text(),
+          'time'      => trim($article->find($tags['time'])->text()),
           'allow'     => false,
           'keywords'  => [],
           'site_url'  => $this->url,
           'site_name'  => $this->site,
         ]; 
+        echo '<pre>';
+        var_dump($article_el);
+        echo '</pre>';
 
-        // echo '<pre>';
-        // var_dump($article_el);
-        // echo '</pre>';
+       
 
         if(!empty($article_el['title']) && !empty($article_el['link'])){
           
@@ -93,6 +101,14 @@ class siteParser {
         'time' => 'small',
       ]; 
     }elseif ($site_name == 'businesswire.com'){
+      
+      $tags = [
+        'article' => '.bwNewsList > li',
+        'title' => 'div > a > span', 
+        'desc' => 'null',
+        'link' => 'div > a.bwTitleLink',
+        'time' => 'div.bwTimestamp > time',
+      ]; 
       
 
     }elseif ($site_name == 'globenewswire.com'){
