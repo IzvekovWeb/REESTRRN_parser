@@ -11,42 +11,49 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 include_once '../config/database.php';
 
 // создание объекта товара 
-include_once '../objects/news.php';
+include_once '../objects/user.php';
 
 $database = new Database();
 $db = $database->getConnection();
 
-$news = new News($db);
+$user = new Userx($db);
  
 // получаем отправленные данные 
 $data = $_POST;
-$files = $_FILES;
  
 
 // убеждаемся, что данные не пусты 
  
 if (
-    !empty($data['title']) &&
-    !empty($data['link'])
+    !empty($data['loginx']) &&
+    !empty($data['passwordx']) &&
+    !empty($data['email']) 
 ) {
     $data = (Object)$data;
-    $files = (Object)$files;
 
-    // устанавливаем значения свойств товара 
-    $news->title = $data->title;
-    $news->link = $data->link;
-    $news->description = $data->description;
-    $news->site_link = $data->site_link;
-    $news->time = $data->time;
+    // хешируем пароль
+    $passwordx = password_hash($data->passwordx, PASSWORD_DEFAULT);
+
+    // создаём уникальный хеш для подтверждения email
+    $hash =  md5($data->loginx . time());
+
+    // устанавливаем значения свойств пользователя 
+    $user->loginx        = $data->loginx;
+    $user->passwordx     = $passwordx;
+    $user->name          = $data->name;
+    $user->email         = $data->email;
+    $user->hash          = $hash;
+    $user->email_confirned   = 0;
+    $user->reg_date      = $data->reg_date;
 
     // создание новости \ добавление в БД 
-    if($news->create()){
+    if($user->create()){
 
         // установим код ответа - 201 создано 
         http_response_code(201);
 
         // сообщим пользователю 
-        echo json_encode(array("message" => "Работа успешно добавлена."), JSON_UNESCAPED_UNICODE);
+        echo json_encode(array("message" => "Пользователь успешно добавлен."), JSON_UNESCAPED_UNICODE);
     }
 
     // если не удается создать товар, сообщим пользователю 
@@ -67,6 +74,6 @@ else {
     http_response_code(400);
 
     // сообщим пользователю 
-    echo json_encode(array("message" => "Невозможно добавить работу. Данные неполные."), JSON_UNESCAPED_UNICODE);
+    echo json_encode(array("message" => "Невозможно добавить пользователя. Данные неполные."), JSON_UNESCAPED_UNICODE);
 }
 ?>
