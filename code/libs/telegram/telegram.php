@@ -33,6 +33,10 @@ class Telegram {
   public static function create_message($mas)
   {   $message = '';
       foreach ($mas as $el) {
+        echo "<pre>";
+        var_dump($el);
+        echo "</pre>";
+
         $message .= "<b>Заголовок:</b> " . $el['title'] . PHP_EOL . PHP_EOL;
         $message .= "<b>Описание:</b> "  . $el['desc'] . PHP_EOL . PHP_EOL;
         $message .= "<b>Новость:</b> <a href='"  . $el['link'] . "'>ссылка</a>" . PHP_EOL . PHP_EOL;
@@ -43,9 +47,9 @@ class Telegram {
         }
         $message .= PHP_EOL . PHP_EOL;
         if ($el['time'] != ''){
-          $message .= "<b>Время:</b>" . $el['time'] . PHP_EOL . PHP_EOL;
+          $message .= "<b>Время:</b> " . $el['time'] . PHP_EOL . PHP_EOL;
         }else{
-          $message .= "<b>Время отправки парсером: </b>" . date("Y-m-d H:i:s") . PHP_EOL . PHP_EOL;
+          $message .= "<b>Время отправки парсером:</b> " . date("Y-m-d H:i:s") . PHP_EOL . PHP_EOL;
         }
         $message .= '============================' . PHP_EOL . PHP_EOL;
       }

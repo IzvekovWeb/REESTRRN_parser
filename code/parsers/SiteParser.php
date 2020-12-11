@@ -7,7 +7,7 @@ class siteParser {
 
   function __construct($site, $url, $keywords) { 
     $this->site = $site;
-    $this->url = $url;
+    $this->url = $url['url'];
     $this->keywords = $keywords;
   }
 
@@ -20,20 +20,12 @@ class siteParser {
   public function parse_HTML($document, $tags){
     
     // Обёртка новостей
- 
-
     $articles = $document->find($tags['article']);
     $values = Array();
     if (!empty($articles)) {
 
-      echo '<pre>';
-      var_dump($tags['article']);
-      echo '</pre>';
+      // dump($articles);
 
-      // echo '<pre>';
-      // var_dump($articles);
-      // echo '</pre>';
-    
       foreach($articles as $art){
 
         $article = pq($art);   
@@ -57,20 +49,15 @@ class siteParser {
         // Проверяем на наличие ключевых слов в заголовке или описании
         if(!empty($article_el['title']) && !empty($article_el['link'])){
 
-          
-          
           foreach ($this->keywords as $key){
 
             // Если ключевое слово есть в заголовке или описании
             if (stripos($article_el['title'], $key) || stripos($article_el['desc'], $key)){
-              
-              
 
               // Допускаем новость и записываем ключевое слово
               $article_el['allow'] = true;
               array_push($article_el['keywords'], $key);
             }
-            
           }
           // Добавляем данные одной заметки в массив со всеми заметками
           if($article_el['allow']){
@@ -96,70 +83,61 @@ class siteParser {
   public function parse_JSON($data, $tags){
     
     // Обёртка новостей
-    $json = json_decode($data);
+    $json = json_decode($data); 
+    $values = Array();
 
-    // dump($json);
+    if(!empty($json) && $json ) {
 
-    // $articles = $document->find($tags['article']);
-    // $values = Array();
-    // if (!empty($articles)) {
-
-    //   echo '<pre>';
-    //   var_dump($tags['article']);
-    //   echo '</pre>';
-
-    //   // echo '<pre>';
-    //   // var_dump($articles);
-    //   // echo '</pre>';
-    
       foreach($json as $article){
         
-        dump($art); 
-        echo $article->$tags['title'];
+        // dump($article);  
+        
+        $link = '';
+        if ($this->site == "streetinsider.com") {
+          $link = "https://www.streetinsider.com/dr/news.php?id=" . $article->{$tags['link']};
+        }
+        else {
+          $link = $article->{$tags['link']};
+        } 
+
         // Отбираем нужные данные и заносим в массив
         $article_el = [
-          'title'     => trim($article->$tags['title']),
-          // 'desc'      => trim($article->find($tags['desc'])->text()),
-          // 'link'      => $this->site . $article->find($tags['link'])->attr('href'),
-          // 'time'      => trim($article->find($tags['time'])->text()),
-          // 'allow'     => false,
-          // 'keywords'  => [],
-          // 'site_url'  => $this->url,
-          // 'site_name'  => $this->site,
+          'title'     => trim($article->{$tags['title']}),
+          'desc'      => trim($article->{$tags['desc']}),
+          'link'      => $link,
+          'time'      => trim($article->{$tags['time']}),
+          'allow'     => false,
+          'keywords'  => [],
+          'site_url'  => $this->url,
+          'site_name'  => $this->site,
         ]; 
 
-        // echo '<pre>';
-        // var_dump($article_el);
-        // echo '</pre>';
+        // dump($article_el); 
 
         // Проверяем на наличие ключевых слов в заголовке или описании
-        if(!empty($article_el['title']) && !empty($article_el['link'])){
-
-          
+        if(!empty($article->{$tags['title']}) && $link != ''){
           
           foreach ($this->keywords as $key){
 
             // Если ключевое слово есть в заголовке или описании
-            if (stripos($article_el['title'], $key) || stripos($article_el['desc'], $key)){
-              
-              
-
+            if (stripos($article->{$tags['title']}, $key) || stripos($article->{$tags['desc']}, $key)){
+               
               // Допускаем новость и записываем ключевое слово
               $article_el['allow'] = true;
               array_push($article_el['keywords'], $key);
             }
-            
           }
           // Добавляем данные одной заметки в массив со всеми заметками
           if($article_el['allow']){
             array_push($values, $article_el);
           }
-        }
+        } 
+
       }
-    // }
-    // else{
-    //   return ['message' => 'На сайте не нашлось подходящих тегов ','error' => true, 'result' => $values];
-    // }
+    }
+    else{
+      return ['message' => 'На сайте не нашлось подходящих тегов ','error' => true, 'result' => $values];
+    }
     
     return ['message' => 'Сайт успешно спарсен ','error' => false, 'result' => $values];
   }
@@ -213,14 +191,14 @@ class siteParser {
       ];
     }
 
-    // Разобраться с ссылкой, ее нет в JSON
+    // Парсится через json
     elseif ($site_name == 'streetinsider.com'){
       // JSON
       $tags = [
         'article' => 'id',
         'title' => 'headline',
         'desc' => 'body',
-        'link' => 'a',
+        'link' => 'id',
         'time' => 'date',
       ];
     }

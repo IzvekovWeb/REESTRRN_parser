@@ -10,6 +10,7 @@ require('libs/telegram/telegram.php');
 require('parsers/SiteParser.php');
 
 $t_bot = new Telegram();
+$new_news = Array();
 
 // for ($i = 0; $i < 6; $i++) {
   $start_time =  microtime(true);
@@ -19,7 +20,7 @@ $t_bot = new Telegram();
   if (!$result['error']){ 
 
     if (count($result['result']) > 0) {
-    
+      
       foreach ($result['result'] as $one_news){ 
 
         // Если новость уже есть в БД, идём дальше
@@ -31,15 +32,16 @@ $t_bot = new Telegram();
         }else{
           echo "Такой новости нет - ".$one_news['title'] ."<br>"; 
 
-
-          // Добавляем новость в бд
-          add_news_bd($one_news);
-          // Добавляем новость в массив с новыми новостями
-          array_push($new_news, $one_news);
-
+          if ($one_news != null) {
+            // Добавляем новость в бд
+            add_news_bd($one_news);
+            // Добавляем новость в массив с новыми новостями
+              
+            array_push($new_news, $one_news); 
+          }
         } 
-      }  
-      if(!empty($new_news)){
+      }   
+      if(!empty($new_news) && count($new_news) > 0){
         // Отправляем в телеграмттолько новые новости
         $t_bot->send_message($t_bot->create_message($new_news));
       } 
@@ -62,14 +64,14 @@ function start(){
   // Стартовые данные 
   // Позже будут в БД
   $urls = [
-    // 'globenewswire.com' => ['url' => 'https://www.globenewswire.com/Index','type' => 'html'],
-    // 'prnewswire.com'    => ['https://www.prnewswire.com/news-releases/news-releases-list/', 'html']
-    // 'businesswire.com'  => ['https://www.businesswire.com/portal/site/home/news/', 'html']
-    // 'finance.yahoo.com' => ['https://finance.yahoo.com/news/', 'html']
-    // 'barrons.com'       => ['https://www.barrons.com/topics/markets', 'html']
+    'globenewswire.com' => ['url' => 'https://www.globenewswire.com/Index','type' => 'html'],
+    'prnewswire.com'    => ['url' => 'https://www.prnewswire.com/news-releases/news-releases-list/','type' => 'html'],
+    'businesswire.com'  => ['url' => 'https://www.businesswire.com/portal/site/home/news/','type' =>  'html'],
+    'finance.yahoo.com' => ['url' => 'https://finance.yahoo.com/news/','type' =>  'html'],
+    'barrons.com'       => ['url' =>'https://www.barrons.com/topics/markets','type' =>  'html'],
 
 
-    'streetinsider.com'     => ['url' => 'https://www.streetinsider.com/dr/ajax.php?a=basic_latest_news&type=top','type' => 'json']
+    'streetinsider.com'     => ['url' => 'https://www.streetinsider.com/dr/ajax.php?a=basic_latest_news&type=top','type' => 'json'],
     
     // 'bloomberg.com'    => 'https://www.bloomberg.com/deals',
     // 'cnbc.com' => 'https://www.cnbc.com/markets/',
@@ -94,9 +96,9 @@ function start(){
     
   ];
   $words = [
-    'acquire','agreed to buy', 'reports preliminary', 'expecting record performance'
+    'acquire', 'global'
   ];
-  $companies = ['Nike', 'Macerich', 'Tesla', 'six'];
+  $companies = ['Nike', 'Macerich', 'Tesla', 'trends'];
   $keywords = array_merge($words, $companies);
   // -------------------------
   
@@ -141,15 +143,7 @@ function start(){
     } 
     else {
       
-    // $opts = array('http' => array(
-    //   'method' => "GET",
-    //   'header' => "User-Agent Mozilla/5.0 (Windows NT 6.1; WOW64; rv:24.0) Gecko/20100101 Firefox/24.0\r\n"
-    //   . "Accept:text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\r\n"
-    //   . "Accept-Encoding:gzip, deflate\r\n"
-    //   . "Accept-Language:cs,en-us;q=0.7,en;q=0.3\r\n"
-    //   . "Connection:keep-alive\r\n"
-    //   . "Host:www.".$site."\r\n"
-    //   ));
+    
       $html = file_get_contents($url['url']);
     
     }  
@@ -177,11 +171,9 @@ function start(){
       echo "Ошибка! Нет данных (тегов) для парсинга сайта " . $site . "<br>";
     }
     
+  } 
     
-    return $result_mas;
-  }
-
-
+  return $result_mas;
 
 }// start()
 
