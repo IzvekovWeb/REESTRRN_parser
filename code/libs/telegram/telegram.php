@@ -1,14 +1,19 @@
 <?php 
+
+
+
 class Telegram {
 
   // сюда нужно вписать токен вашего бота
   const TELEGRAM_TOKEN = '1364265656:AAH7fgfnZE4n3bsaeEFC0PVJoStnYnWVt8M';
 
   // сюда нужно вписать ваш внутренний айдишник
-  // const TELEGRAM_CHATID = -465108518; //группа
-  const TELEGRAM_CHATID = 445743340; // я
+  // const TELEGRAM_CHATID_COMPANIES = -465108518; //группа для компаний
+  // const TELEGRAM_CHATID_WORDS = -478273397; //группа для слов
+  // const TELEGRAM_CHATID = 445743340; // я
+ 
 
-  public static function send_message($text)
+  public static function send_message($text, $chat_id)
   {
       $ch = curl_init();
       curl_setopt_array(
@@ -19,7 +24,7 @@ class Telegram {
                 CURLOPT_RETURNTRANSFER => TRUE,
                 CURLOPT_TIMEOUT => 10,
                 CURLOPT_POSTFIELDS => http_build_query(array(
-                    'chat_id' => self::TELEGRAM_CHATID,
+                    'chat_id' => $chat_id,
                     'text' => $text,
                     'parse_mode' => 'HTML',
                     'disable_web_page_preview' => true,
@@ -33,9 +38,7 @@ class Telegram {
   public static function create_message($mas)
   {   $message = '';
       foreach ($mas as $el) {
-        echo "<pre>";
-        var_dump($el);
-        echo "</pre>";
+         
 
         $message .= "<b>Заголовок:</b> " . $el['title'] . PHP_EOL . PHP_EOL;
         $message .= "<b>Описание:</b> "  . $el['desc'] . PHP_EOL . PHP_EOL;
@@ -56,6 +59,5 @@ class Telegram {
       return $message;
   }
 
-}
-  
+} 
 ?>

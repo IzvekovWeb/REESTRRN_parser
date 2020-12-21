@@ -22,6 +22,9 @@ class siteParser {
     // Обёртка новостей
     $articles = $document->find($tags['article']);
     $values = Array();
+
+    echo "Тег статьи: " . $tags['article'] . "<br>";
+
     if (!empty($articles)) {
 
       // dump($articles);
@@ -30,21 +33,28 @@ class siteParser {
 
         $article = pq($art);   
 
+        // dump($article);
+
+        // Задаём ссылку на статью
+        if (strpos($article->find($tags['link'])->attr('href'), 'http') || strpos($article->find($tags['link'])->attr('href'), $this->site) ) {
+          $link = $article->find($tags['link'])->attr('href');
+        }else {
+          $link = $this->site . $article->find($tags['link'])->attr('href');
+        }
+
         // Отбираем нужные данные и заносим в массив
         $article_el = [
           'title'     => trim($article->find($tags['title'])->text()),
           'desc'      => trim($article->find($tags['desc'])->text()),
-          'link'      => $this->site . $article->find($tags['link'])->attr('href'),
+          'link'      => $link,
           'time'      => trim($article->find($tags['time'])->text()),
           'allow'     => false,
           'keywords'  => [],
           'site_url'  => $this->url,
           'site_name'  => $this->site,
         ]; 
-
-        // echo '<pre>';
-        // var_dump($article_el);
-        // echo '</pre>';
+ 
+        // dump($article_el); 
 
         // Проверяем на наличие ключевых слов в заголовке или описании
         if(!empty($article_el['title']) && !empty($article_el['link'])){
@@ -60,6 +70,9 @@ class siteParser {
             }
           }
           // Добавляем данные одной заметки в массив со всеми заметками
+
+          // dump($article_el); 
+
           if($article_el['allow']){
             array_push($values, $article_el);
           }
@@ -67,9 +80,8 @@ class siteParser {
       }
     }
     else{
-      return ['message' => 'На сайте не нашлось подходящих тегов ','error' => true, 'result' => $values];
+      return ['message' => 'На сайте не нашлось подходящих тегов','error' => true, 'result' => $values];
     }
-    
     return ['message' => 'Сайт успешно спарсен ','error' => false, 'result' => $values];
   }
 
@@ -204,22 +216,22 @@ class siteParser {
     }
     // elseif ($site_name == 'bloomberg.com'){
     //   $tags = [
-    //     'article' => 'div.story-package-module',
-    //     'title' => 'h3.story-package-module__story__headline > a',
-    //     'desc' => 'dfn',
-    //     'link' => 'h3.story-package-module__story__headline > a',
-    //     'time' => 'null',
+    //     'article' => 'article[data-type="article"]',
+    //     'title' => 'h3[class$="headline"] > a',
+    //     'desc' => 'null',
+    //     'link' => 'h3[class$="headline"] > a',
+    //     'time' => 'h3[class$="headline"] > time',
     //   ];
     // }
     // elseif ($site_name == 'cnbc.com'){
     //   $tags = [
-    //     'article' => 'div.Card-card',
-    //     'title' => 'a',
+    //     'article' => 'div[class="Card-standardBreakerCard"]',
+    //     'title' => 'div[class="Card-titleContainer"] > a > div > div',
     //     'desc' => 'null',
-    //     'link' => 'a',
+    //     'link' => 'div[class="Card-titleContainer"] > a > div > div',
     //     'time' => 'null',
     //   ];
-    // }n
+    // } 
     elseif ($site_name == 'barrons.com'){
       $tags = [
         'article' => 'article',
@@ -238,6 +250,44 @@ class siteParser {
         'time' => 'null',
       ];
     }
+    elseif ($site_name == 'fda.gov'){
+      $tags = [
+        'article' => '.views-field',
+        'title' => 'span > a',
+        'desc' => 'null',
+        'link' => 'span > a',
+        'time' => 'span > a > time',
+      ];
+    }
+    elseif ($site_name == 'mobile.reuters.com'){
+      $tags = [
+        'article' => 'article.article',
+        'title'   => 'h3.article-heading > a',
+        'desc'    => 'null',
+        'link'    => 'h3.article-heading > a',
+        'time'    => 'null',
+      ];
+    }
+    elseif ($site_name == 'wsj.com'){
+      $tags = [
+        'article' => 'article',
+        'title'   => 'h2[class^="WSJTheme--headline"] > a',
+        'desc'    => 'null',
+        'link'    => 'h2[class^="WSJTheme--headline"] > a',
+        'time'    => 'p[class^="WSJTheme--timestamp"]',
+      ];
+    }
+    elseif ($site_name == 'thefly.com'){
+      $tags = [
+        'article' => 'tr[id^="news"]',
+        'title'   => '.story_header > a > span',
+        'desc'    => 'p.abstract',
+        'link'    => '.story_header > a',
+        'time'    => 'null', // в теории настроить можно
+      ];
+    }
+    
+    
 
     
     return $tags;

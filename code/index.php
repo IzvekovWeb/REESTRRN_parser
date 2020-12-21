@@ -8,48 +8,90 @@ require('functions/function.php');
 require('libs/phpQuery/phpQuery.php');
 require('libs/telegram/telegram.php');
 require('parsers/SiteParser.php');
+ 
+file_put_contents('log.txt', 'Программа запущена ' . date('Y-m-d H:i:s') . '<br>', FILE_APPEND);
 
 $t_bot = new Telegram();
-$new_news = Array();
+$new_news_companies = Array();
+$new_news_words = Array();
+
+$words = [
+  // 'covid', 'sale', 'and', 'Free', 'By', 'to'
+];
+$companies = ['Nike', 'Macerich', 'Tesla', 'trends', 'and', 'Free', 'By', 'to'];
+ 
 
 // for ($i = 0; $i < 6; $i++) {
   $start_time =  microtime(true);
 
-  $result = start(); 
+  $result = start($words, $companies); 
  
+  // dump($result);
   if (!$result['error']){ 
 
     if (count($result['result']) > 0) {
       
-      foreach ($result['result'] as $one_news){ 
+      // dump($result);
 
-        // Если новость уже есть в БД, идём дальше
-        if (is_news_exist_bd($one_news) == 'true') {
 
-          echo "Такая новость уже есть - ".$one_news['title'] ."<br>"; 
-          //continue;
+      // Проходимяся по сайтам
+      foreach ($result['result'] as $site => $cur_site_news){ 
 
-        }else{
-          echo "Такой новости нет - ".$one_news['title'] ."<br>"; 
+        echo $site . '<br>';
 
-          if ($one_news != null) {
-            // Добавляем новость в бд
-            add_news_bd($one_news);
-            // Добавляем новость в массив с новыми новостями
-              
-            array_push($new_news, $one_news); 
-          }
-        } 
-      }   
-      if(!empty($new_news) && count($new_news) > 0){
-        // Отправляем в телеграмттолько новые новости
-        $t_bot->send_message($t_bot->create_message($new_news));
+        if(count($cur_site_news) > 0) {
+          // Проходимся по новостям на конкретном сайте
+          foreach ($cur_site_news as  $one_news){ 
+
+            // Отсеиваем уже добавленный\отправленные новости
+            if (is_news_exist_bd($one_news) == 'true') {
+
+              echo "Такая новость уже есть - ".$one_news['title'] ."<br>"; 
+              //continue;
+
+            }else{
+              echo "Такой новости нет - ".$one_news['title'] ."<br>"; 
+
+              if ($one_news != null) {
+                // Добавляем новость в бд
+                add_news_bd($one_news);
+                
+                // Проверим на совпадение ключа с КЛЮЧЕВЫМИ СЛОВАМИ
+                $inter_mas = array_intersect($words, $one_news['keywords']);
+
+                // Если найдено по "словам" то отправляем в общий чат, иначе в обычный
+                if(count($inter_mas) > 0) {
+                  array_push($new_news_words, $one_news); 
+                }else {
+                  array_push($new_news_companies, $one_news); 
+                } 
+              }
+            } 
+
+          } //foreach
+        } //if
+      } //foreach
+
+      // dump($new_news_companies);
+      // dump($new_news_words);
+
+      // Отправляем в группу по КОМПАНИЯМ ттолько новые новости
+      if(!empty($new_news_companies) && count($new_news_companies) > 0){
+        $t_bot->send_message($t_bot->create_message($new_news_companies), -465108518);
+        $new_news_companies = [];
       } 
+
+      // Отправляем в группу по СЛОВАМ ттолько новые новости
+      if(!empty($new_news_words) && count($new_news_words) > 0 ){
+        $t_bot->send_message($t_bot->create_message($new_news_words), -478273397);
+        $new_news_words = [];
+      } 
+      
     }
     else  {
       echo "В данный момент нет подходящих новостей" . PHP_EOL;
+      // dump($result);
     }
-
   }
   else{
     echo $result['message'] . PHP_EOL;
@@ -57,52 +99,44 @@ $new_news = Array();
   echo "<br> Парсинг занял: " . round(microtime(true) - $start_time, 4) . " сек.<br>";
 //   sleep(10);
 // }
+ 
+file_put_contents('log.txt', 'Программа зевершена ' . date('"Y-m-d H:i:s"') . '<br><br>', FILE_APPEND);
 
 
-function start(){
+
+function start($words, $companies){
 
   // Стартовые данные 
   // Позже будут в БД
   $urls = [
-    'globenewswire.com' => ['url' => 'https://www.globenewswire.com/Index','type' => 'html'],
-    'prnewswire.com'    => ['url' => 'https://www.prnewswire.com/news-releases/news-releases-list/','type' => 'html'],
-    'businesswire.com'  => ['url' => 'https://www.businesswire.com/portal/site/home/news/','type' =>  'html'],
-    'finance.yahoo.com' => ['url' => 'https://finance.yahoo.com/news/','type' =>  'html'],
-    'barrons.com'       => ['url' =>'https://www.barrons.com/topics/markets','type' =>  'html'],
+    'globenewswire.com'    => ['url' => 'https://www.globenewswire.com/Index','type' => 'html'],
+    'prnewswire.com'       => ['url' => 'https://www.prnewswire.com/news-releases/news-releases-list/','type' => 'html'],
+    'businesswire.com'     => ['url' => 'https://www.businesswire.com/portal/site/home/news/','type' =>  'html'],
+    'finance.yahoo.com'    => ['url' => 'https://finance.yahoo.com/news/','type' =>  'html'],
+    'barrons.com'          => ['url' => 'https://www.barrons.com/topics/markets','type' =>  'html'],
+    'streetinsider.com'    => ['url' => 'https://www.streetinsider.com/dr/ajax.php?a=basic_latest_news&type=top','type' => 'json'],
+    'seekingalpha.com'     => ['url' => 'https://seekingalpha.com/market-news/all','type' => 'html'],
+    'fda.gov'              => ['url' => 'https://www.fda.gov/news-events/fda-newsroom/press-announcements','type' =>  'html'],
+    'mobile.reuters.com'   => ['url' => 'https://mobile.reuters.com/finance/markets','type' =>  'html'],
+    'wsj.com'              => ['url' => 'https://www.wsj.com/news/latest-headlines?mod=wsjheader','type' =>  'html'],
+    'thefly.com'           => ['url' => 'https://thefly.com/news.php','type' =>  'html'],
 
-
-    'streetinsider.com'     => ['url' => 'https://www.streetinsider.com/dr/ajax.php?a=basic_latest_news&type=top','type' => 'json'],
-    
-    // 'bloomberg.com'    => 'https://www.bloomberg.com/deals',
-    // 'cnbc.com' => 'https://www.cnbc.com/markets/',
-    
-    // 'bloomberg.com' => 'https://www.bloomberg.com/markets/stocks/world-indexes/americas',
-    // 'seekingalpha.com' => 'https://seekingalpha.com/market-news/all',
-    // '' => '',
-    // '' => '',
-    // '' => '',
-
-    /*
-    https://www.cnbc.com/business/
-    
-    https://www.fda.gov/news-events/fda-newsroom/press-announcements
+    // 'bloomberg.com'     => ['url' => 'https://www.bloomberg.com/deals','type' =>  'html'], // Вылезает капча
+    // 'cnbc.com'          => ['url' => 'https://www.cnbc.com/markets/','type' =>  'html'], // json - защищен, а сайт не парсится (ощибка сервера)
      
-    https://mobile.reuters.com/finance/markets
-    https://www.wsj.com/news/latest-headlines?mod=wsjheader
-    https://thefly.com/news.php
+  
+    /*
+    
     https://www.docwirenews.com
     https://www.channelnewsasia.com/news/business
     */
     
   ];
-  $words = [
-    'acquire', 'global'
-  ];
-  $companies = ['Nike', 'Macerich', 'Tesla', 'trends'];
-  $keywords = array_merge($words, $companies);
-  // -------------------------
   
+  $keywords = array_merge($words, $companies);
+  // ------------------------- 
 
+  $result_mas = ['message' =>'Данные для парсинга не были получены ', 'error' => true, 'result' => []];
 
   // Проходимся по всем сайтам
   foreach ($urls as $site => $url){
@@ -131,40 +165,57 @@ function start(){
         ."sec-fetch-mode: cors"
         ."sec-fetch-site: cross-site"
         ."user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36"
-        ));
+      ));
         
     $context = stream_context_create($opts); 
     $html = file_get_contents($url['url'],false,$context);
-      
     }
     elseif ($url['type'] == 'json'){
-       
       $json =  file_get_contents_curl($url['url']);
     } 
     else {
-      
-    
       $html = file_get_contents($url['url']);
-    
     }  
-
-    $result_mas = ['message' =>'Данные для парсинга не были получены с '. $site, 'error' => true, 'result' => []];
 
     $parser = new siteParser($site, $url, $keywords);
     $tags = $parser->set_tags($site);
+
 
     // Проверяем заданы ли теги для этого сайта
     if($tags != null) {
 
       // Проверяем тип сайта html или JSON
-      if ($html !== null && $url['type'] == 'html') {
+      if ($html !== null && $url['type'] == 'html') { 
 
-        $document_html = phpQuery::newDocument($html);
-        $result_mas = pritify_result($parser->parse_HTML($document_html, $tags));
+        $document_html = phpQuery::newDocument($html); 
+        
+        $parse_result = $parser->parse_HTML($document_html, $tags); 
+        if(!$parse_result['error']){
+
+          echo 'Сайт спарсен успешно <br><br>';
+
+          $result_mas['message'] = $parse_result['message'];
+          $result_mas['error'] = $parse_result['error'];
+          $result_mas['result'][$site] = $parse_result['result']; 
+        }
+        else{
+          echo 'При парсенге произошла ошибка: '. $parse_result['message'];
+        }
         
       }
       elseif ($json !== null  && $url['type'] == 'json'){ 
-        $result_mas = pritify_result($parser->parse_JSON($json, $tags));
+        $parse_result = $parser->parse_JSON($json, $tags);
+        if(!$parse_result['error']){
+
+          echo 'Сайт спарсен успешно <br>';
+
+          $result_mas['message'] = $parse_result['message'];
+          $result_mas['error'] = $parse_result['error'];
+          $result_mas['result'][$site] = $parse_result['result']; 
+        }
+        else{
+          echo 'При парсенге произошла ошибка: '. $parse_result['message'];
+        }
       }
     }
     else{
@@ -178,35 +229,7 @@ function start(){
 }// start()
 
 
-/* 
-*-------------------------
-*---- Формирует массив полученных новостей
-*-------------------------
-*/
-function pritify_result($result) {
-  $parced_news = [];
-  $result_mas = ['message' =>'Неизвестная ошибка', 'error' => true, 'result' => []];
-
-
-  if(!$result['error']){
-    $i = 0;
-    foreach ($result['result'] as $one_parced_news){
-      array_push($parced_news, $one_parced_news);
-      $i++;
-    } 
-    $result_mas['message']  = 'Хотя бы 1 сайт спарсен успешно';
-    $result_mas['error']    = false;
-  }
-  else{
-    echo "ПРОВАЛ!" . '<br>';
-    echo $result['message'] . $site . PHP_EOL;
-  }
-  
-  $result_mas['result'] = $parced_news;
-    
-  return $result_mas;
-    
-} //pritify_result()
+ 
 
  
 
