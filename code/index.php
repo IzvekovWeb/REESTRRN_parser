@@ -6,7 +6,7 @@ ini_set("display_errors", 1);
 require('functions/news_func.php');
 require('functions/function.php');
 require('libs/phpQuery/phpQuery.php');
-require('libs/telegram/telegram.php');
+require('libs/telegram/TelegramBot.php');
 require('parsers/SiteParser.php');
  
 file_put_contents('log.txt', 'Программа запущена ' . date('Y-m-d H:i:s') . '<br>', FILE_APPEND);
