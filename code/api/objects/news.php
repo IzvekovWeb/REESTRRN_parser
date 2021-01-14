@@ -18,7 +18,7 @@ class News {
         $this->conn = $db;
     }
 
-    // метод read() - получение товаров 
+    // метод read() - получение записей
     function read(){
 
       // выбираем все записи 
@@ -187,14 +187,56 @@ class News {
 
 
         // привязка 
+        if (
+        $stmt->bindParam(1, $keywords['title']) &&
+        $stmt->bindParam(2, $keywords['description']) &&
+        $stmt->bindParam(3, $keywords['time']) )
+            {
+                // выполняем запрос 
+                $stmt->execute(); 
+            }else {
+                $stmt = false;
+            }
+        
+
+       return $stmt;
+    }
+    // метод search - поиск товаров 
+    function is_exists($keywords){
+
+        // выборка по всем записям 
+        // $query = "SELECT EXISTS(SELECT 1 
+        // FROM " . $this->table_name . "
+        // WHERE (`title` LIKE ? OR `description` LIKE ?) AND `time` LIKE ? 
+        // ORDER BY time DESC 
+        // LIMIT 1 )";
+
+        $query = 'SELECT EXISTS(SELECT 1 FROM '. $this->table_name .' 
+        WHERE `title` LIKE ? AND `description` LIKE ? AND `time` LIKE ? ORDER BY time DESC)';
+        
+        $this->conn->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_NUM);
+
+        // подготовка запроса 
+        $stmt = $this->conn->prepare($query);
+ 
+        // очистка 
+        foreach ($keywords as $keyword) {
+            $keyword = htmlspecialchars(strip_tags($keyword));
+            $keyword = "%{$keyword}%";
+        } 
+
+
+        // привязка  
         $stmt->bindParam(1, $keywords['title']);
         $stmt->bindParam(2, $keywords['description']);
         $stmt->bindParam(3, $keywords['time']);
 
-        // выполняем запрос 
         $stmt->execute(); 
+           
 
        return $stmt;
     }
+
+    
 }
 ?>

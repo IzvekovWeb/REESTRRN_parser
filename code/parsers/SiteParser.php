@@ -57,13 +57,13 @@ class siteParser {
         // dump($article_el); 
 
         // Проверяем на наличие ключевых слов в заголовке или описании
-        if(!empty($article_el['title']) && !empty($article_el['link'])){
+        if(!empty($article_el['title']) && !empty($article_el['link'])){ 
 
-          foreach ($this->keywords as $key){
-
+          foreach ($this->keywords as $key){ 
+            
             // Если ключевое слово есть в заголовке или описании
-            if (stripos($article_el['title'], $key) || stripos($article_el['desc'], $key)){
-
+            if (stripos($article_el['title'], $key) !== false || stripos($article_el['desc'], $key) !== false){
+ 
               // Допускаем новость и записываем ключевое слово
               $article_el['allow'] = true;
               array_push($article_el['keywords'], $key);

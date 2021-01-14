@@ -1,6 +1,6 @@
 <?php
 // необходимые HTTP-заголовки 
-header("Access-Control-Allow-Origin: https://sasha-izvekov.ru/");
+header("Access-Control-Allow-Origin: https://test.newsparser.ru");
 header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Max-Age: 3600");

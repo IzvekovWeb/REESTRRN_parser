@@ -15,6 +15,10 @@ $db = $database->getConnection();
 // инициализируем объект 
 $news = new news($db);
 
+if (isset($_POST["title"]) || isset($_POST["description"]) || isset($_POST["time"])){
+
+}
+
 // получаем ключевые слова 
 $keywords = Array (
     'title'         => isset($_POST["title"]) ? $_POST["title"] : "",
@@ -22,32 +26,42 @@ $keywords = Array (
     'time'          => isset($_POST["time"]) ? $_POST["time"] : "",
 );
 
+// echo '<pre>';
+// var_dump($keywords);
+// echo '</pre>';
+
 // Не более 3х параметров
 if ( count($keywords) > 3 ) {
     // код ответа - 400 неверный запрос
     http_response_code(400);
     echo json_encode(false, JSON_UNESCAPED_UNICODE);
 } 
-
-// запрос товаров 
-$stmt = $news->search($keywords);
-$num = $stmt->rowCount();
  
+// запрос товаров 
+$stmt = $news->is_exists($keywords);
+
+$num = $stmt->fetch()[0];
 
 // проверяем, найдено ли больше 0 записей 
-if ($num>0) {
+if ($num ==  1) {
 
     // код ответа - 200 OK 
     http_response_code(200);
 
     // покажем товары 
-    echo json_encode(true, JSON_UNESCAPED_UNICODE);
+    echo json_encode(true, JSON_UNESCAPED_UNICODE); 
 }
 
-else {
+elseif ($num == 0) {
     // код ответа - 404 Ничего не найдено 
     http_response_code(404);
 
+    // скажем пользователю, что товары не найдены 
+    echo json_encode(false, JSON_UNESCAPED_UNICODE);
+}
+else {
+    http_response_code(405);
+    
     // скажем пользователю, что товары не найдены 
     echo json_encode(false, JSON_UNESCAPED_UNICODE);
 }
