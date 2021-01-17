@@ -11,7 +11,7 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 
 require_once('../libs/Yandex/YToken.php');
-require_once('../libs/Yandex/MyFiles.php');
+// require_once('../libs/Yandex/MyFiles.php');
   
 $t = new YToken(); 
 $f = new Files(); 

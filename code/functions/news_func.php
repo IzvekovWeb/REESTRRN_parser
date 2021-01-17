@@ -3,6 +3,7 @@
 // Тут я разместил все функции связанные с новостями
 //======================================================================
 
+require_once('libs/Yandex/YToken.php');
 
 /*
 *  Функция: добавить новость в БД
@@ -91,7 +92,7 @@ function file_get_contents_curl($url) {
 *  Вход: текст
 *  Выход: переведенный текст
 */
-function translate_text($text) {
+function translate_text($text, $token) {
 
   $params = [
     "targetLanguageCode"=> "ru",
@@ -113,7 +114,7 @@ function translate_text($text) {
   curl_setopt($ch, CURLOPT_HTTPHEADER,
     array(
         'Content-Type:application/json',
-        'Authorization: Bearer t1.9euelZqYj4uJx52cnZ2ZnpWJjJ6Sje3rnpWayJHNisaNjZuVmMmals2Yl83l9PdtSxQA-u8XThfT3fT3LXoRAPrvF04X0w.ZPtOLPv5bIwgOAt9KH1zxlJOrzIZeayiIq7I6bgimQIEWqviEH1UO-fWtP_XDIUd-3ogANbqe3K00VYi4zJZAA'
+        'Authorization: Bearer ' . $token
     )
 ); 
   curl_setopt($ch, CURLOPT_POSTFIELDS, $data_string);  
@@ -127,11 +128,12 @@ function translate_text($text) {
 
   // Формирует ответ в виде строки
   $result = json_decode($result, JSON_OBJECT_AS_ARRAY );
+ 
   $result = $result['translations'][0]['text'];
   
   return $result;
 }
-  
+
 
 
 /*
@@ -140,16 +142,27 @@ function translate_text($text) {
 *  Выход: массив новостей на русском
 */
 function translate_news($news) {
-  foreach($news as $article){
-    $article['title'] = translate_text($article['title']);
+  $YToken = new YToken();
+
+  $token = $YToken->get_token_from_file();
+  // echo '$token: ' . $token . '<br>';
+   
+  foreach($news as &$article){
+    $article['title'] = translate_text($article['title'], $token);
     if(!empty($article['desc']) && $article['desc'] != null){
-      $article['desc'] = translate_text($article['desc']);
+      $article['desc'] = translate_text($article['desc'], $token);
     } 
     // echo "<pre>";
     // var_dump($article);
     // echo "</pre>";
   }
+  return $news;
 }
+
+
+
+
+
 
 
 ?>

@@ -119,6 +119,7 @@ function apiRequestJson($method, $parameters) {
 
 function processMessage($message) {
   // process incoming message
+  $text = $message;
   $message_id = $message['message_id'];
   $chat_id = $message['chat']['id'];
   if (isset($message['text'])) {

@@ -23,7 +23,7 @@ class siteParser {
     $articles = $document->find($tags['article']);
     $values = Array();
 
-    echo "Тег статьи: " . $tags['article'] . "<br>";
+    // echo "Тег статьи: " . $tags['article'] . "<br>";
 
     if (!empty($articles)) {
 

@@ -49,13 +49,26 @@ class YToken {
   *  Вход: 
   *  Выход: токен
   */
-  public  function get_token_from_file(){
+  public function get_token_from_file(){
     
     $files = Files::get_all_files(dirname(__FILE__), 'txt');
-    krsort($files); 
+    krsort($files);  
 
     if(!empty($files)) {
-      $token = file_get_contents($files[array_key_first($files)]);
+      
+      $file_url = 'https://test.newsparser.ru/code/libs/Yandex/';
+
+      $ch = curl_init();
+      curl_setopt($ch, CURLOPT_AUTOREFERER, TRUE);
+      curl_setopt($ch, CURLOPT_HEADER, false);
+      curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+      curl_setopt($ch, CURLOPT_URL, $file_url  . $files[array_key_first($files)]);
+      curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);    
+      curl_setopt($ch, CURLOPT_POST, TRUE);  
+      $response = curl_exec($ch);
+      curl_close($ch);
+   
+      $token = $response ;
     }
     return $token;
   }
