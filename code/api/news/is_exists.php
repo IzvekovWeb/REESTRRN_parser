@@ -40,7 +40,12 @@ if ( count($keywords) > 3 ) {
 // запрос товаров 
 $stmt = $news->is_exists($keywords);
 
-$num = $stmt->fetch()[0];
+
+// echo '<pre>';
+// var_dump($stmt);
+// echo '</pre>';
+
+$num = $stmt->fetch()[0]; 
 
 // проверяем, найдено ли больше 0 записей 
 if ($num ==  1) {

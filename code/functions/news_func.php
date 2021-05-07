@@ -89,7 +89,7 @@ function file_get_contents_curl($url) {
 
 /*
 *  Функция: Перевод текста с помощью яндекс переводчика
-*  Вход: текст
+*  Вход: текст, яндекс токен
 *  Выход: переведенный текст
 */
 function translate_text($text, $token) {
@@ -124,12 +124,23 @@ function translate_text($text, $token) {
   {
       echo 'Ошибка curl: ' . curl_error($ch);
   }
+  
   curl_close($ch);
+
+  if (strripos($result, "Not Found")) {
+    return false;
+  }
 
   // Формирует ответ в виде строки
   $result = json_decode($result, JSON_OBJECT_AS_ARRAY );
  
-  $result = $result['translations'][0]['text'];
+  if (array_key_exists('translations', $result)){
+    $result = $result['translations'][0]['text'];
+  }else{ 
+    $result = $text;
+    echo "Перевод не удался";
+  }
+  
   
   return $result;
 }
@@ -148,9 +159,15 @@ function translate_news($news) {
   // echo '$token: ' . $token . '<br>';
    
   foreach($news as &$article){
-    $article['title'] = translate_text($article['title'], $token);
+    $title = translate_text($article['title'], $token);
+    if($title){
+      $article['title'] = $title;
+    }
     if(!empty($article['desc']) && $article['desc'] != null){
-      $article['desc'] = translate_text($article['desc'], $token);
+      $desc = translate_text($article['desc'], $token);
+      if($desc){
+        $article['desc'] = $desc;
+      }
     } 
     // echo "<pre>";
     // var_dump($article);
@@ -160,8 +177,18 @@ function translate_news($news) {
 }
 
 
+/*
+*  Функция: Обрезает строку по слову
+*  Вход: строка, длина, что в конце
+*  Выход: строка с постфиксом
+*/
+function cutStr($str, $length=50, $postfix='...'){
+  if ( strlen($str) <= $length)
+      return $str;
 
-
+  $temp = substr($str, 0, $length);
+  return substr($temp, 0, strrpos($temp, ' ') ) . $postfix;
+}
 
 
 

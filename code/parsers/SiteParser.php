@@ -45,13 +45,13 @@ class siteParser {
         // Отбираем нужные данные и заносим в массив
         $article_el = [
           'title'     => trim($article->find($tags['title'])->text()),
-          'desc'      => trim($article->find($tags['desc'])->text()),
+          'desc'      => cutStr(trim($article->find($tags['desc'])->text()), 650),
           'link'      => $link,
           'time'      => trim($article->find($tags['time'])->text()),
           'allow'     => false,
           'keywords'  => [],
           'site_url'  => $this->url,
-          'site_name'  => $this->site,
+          'site_name' => $this->site,
         ]; 
  
         // dump($article_el); 
@@ -115,7 +115,7 @@ class siteParser {
         // Отбираем нужные данные и заносим в массив
         $article_el = [
           'title'     => trim($article->{$tags['title']}),
-          'desc'      => trim($article->{$tags['desc']}),
+          'desc'      => cutStr(trim($article->{$tags['desc']}), 650),
           'link'      => $link,
           'time'      => trim($article->{$tags['time']}),
           'allow'     => false,

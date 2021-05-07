@@ -56,7 +56,7 @@ $companies = ["Sierra","Aaron's", "Vontier","American Outdoor","Henkel","VOLKSWA
 
               if ($one_news != null) {
                 // Добавляем новость в бд
-                // add_news_bd($one_news);
+                add_news_bd($one_news);
                 
                 // Проверим на совпадение ключа с КЛЮЧЕВЫМИ СЛОВАМИ
                 $inter_mas = array_intersect($words, $one_news['keywords']);
@@ -78,7 +78,7 @@ $companies = ["Sierra","Aaron's", "Vontier","American Outdoor","Henkel","VOLKSWA
       // Отправляем в группу по КОМПАНИЯМ только новые новости
       if(!empty($new_news_companies) && count($new_news_companies) > 0){
         // переводим новости
-        $new_news_companies = translate_news($new_news_companies);
+        // $new_news_companies = translate_news($new_news_companies);
         
 
         // Отправка в телеграм
@@ -89,7 +89,7 @@ $companies = ["Sierra","Aaron's", "Vontier","American Outdoor","Henkel","VOLKSWA
       // Отправляем в группу по СЛОВАМ ттолько новые новости
       if(!empty($new_news_words) && count($new_news_words) > 0 ){
         // переводим новости
-        $new_news_words = translate_news($new_news_words);
+        // $new_news_words = translate_news($new_news_words);
 
         // Отправка в телеграм
         $t_bot->send_message($t_bot->create_message($new_news_words), 445743340);

@@ -70,6 +70,8 @@ class YToken {
    
       $token = $response ;
     }
+ 
+
     return $token;
   }
 

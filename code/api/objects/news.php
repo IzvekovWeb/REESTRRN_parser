@@ -204,35 +204,20 @@ class News {
     // метод search - поиск товаров 
     function is_exists($keywords){
 
-        // выборка по всем записям 
-        // $query = "SELECT EXISTS(SELECT 1 
-        // FROM " . $this->table_name . "
-        // WHERE (`title` LIKE ? OR `description` LIKE ?) AND `time` LIKE ? 
-        // ORDER BY time DESC 
-        // LIMIT 1 )";
-
-        $query = 'SELECT EXISTS(SELECT 1 FROM '. $this->table_name .' 
-        WHERE `title` LIKE ? AND `description` LIKE ? AND `time` LIKE ? ORDER BY time DESC)';
-        
-        $this->conn->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_NUM);
-
-        // подготовка запроса 
-        $stmt = $this->conn->prepare($query);
  
-        // очистка 
-        foreach ($keywords as $keyword) {
-            $keyword = htmlspecialchars(strip_tags($keyword));
-            $keyword = "%{$keyword}%";
-        } 
+        $var1 = $keywords['title'];
+        $var2 = $keywords['description'];
+        $var3 = $keywords['time'];
 
-
-        // привязка  
-        $stmt->bindParam(1, $keywords['title']);
-        $stmt->bindParam(2, $keywords['description']);
-        $stmt->bindParam(3, $keywords['time']);
-
-        $stmt->execute(); 
+        $query = "SELECT EXISTS(SELECT 1  FROM ".$this->table_name." WHERE title LIKE ? AND description LIKE ? AND time LIKE ?)";
+        $params = array("%$var1%","%$var2%" ,"%$var3%");
+        // $this->conn->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_NUM);
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute($params);
            
+        // echo "<pre>";
+        // var_dump($stmt);
+        // echo "</pre>";
 
        return $stmt;
     }

@@ -65,32 +65,7 @@ class Telegram {
   }
  
  
-  // сюда нужно вписать ваш внутренний айдишник
-  // const TELEGRAM_CHATID_COMPANIES = -465108518; //группа для компаний
-  // const TELEGRAM_CHATID_WORDS = -478273397; //группа для слов
-  // const TELEGRAM_CHATID = 445743340; // я 
-
-  // public static function send_message($text, $chat_id)
-  // {
-  //     $ch = curl_init();
-  //     curl_setopt_array(
-  //           $ch,
-  //           array(
-  //               CURLOPT_URL => 'https://api.telegram.org/bot' . self::TELEGRAM_TOKEN . '/sendMessage',
-  //               CURLOPT_POST => TRUE,
-  //               CURLOPT_RETURNTRANSFER => TRUE,
-  //               CURLOPT_TIMEOUT => 10,
-  //               CURLOPT_POSTFIELDS => http_build_query(array(
-  //                   'chat_id' => $chat_id,
-  //                   'text' => $text,
-  //                   'parse_mode' => 'HTML',
-  //                   'disable_web_page_preview' => true,
-  //               )),
-  //           )
-  //       );
-  //       curl_exec($ch);
-  //       curl_close($ch);
-  // }
+ 
 
   /* 
   * Формирует сообщение для отправки пользователю
@@ -124,7 +99,11 @@ class Telegram {
       return $messages_arr;
   }
 
+
+
 } 
+
+
 
 
 ?>
