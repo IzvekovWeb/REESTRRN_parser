@@ -2,7 +2,7 @@
 
 
 // include('../../../vendor/autoload.php'); //Подключаем библиотеку
-//https://api.telegram.org/bot1364265656:AAH7fgfnZE4n3bsaeEFC0PVJoStnYnWVt8M/setWebhook?url=https://test.newsparser.ru/code/libs/telegram/TelegramMessageHandler.php
+//https://api.telegram.org/bot1364265656:AAFsxPuqB-jbsnftB0A8uajtWtC6fXkzSt8/setWebhook?url=https://test.newsparser.ru/code/libs/telegram/TelegramMessageHandler.php
 
 use Telegram\Bot\Api;
 use Telegram\Bot\Keyboard\Keyboard;
@@ -12,7 +12,7 @@ class Telegram {
 
   public static function send_message($messages, $chat_id){
 
-    $bot = new Api('1364265656:AAH7fgfnZE4n3bsaeEFC0PVJoStnYnWVt8M'); //Устанавливаем токен, полученный у BotFather
+    $bot = new Api('1364265656:AAFsxPuqB-jbsnftB0A8uajtWtC6fXkzSt8'); //Устанавливаем токен, полученный у BotFather
     // $result = $telegram -> getWebhookUpdates(); //Передаем в переменную $result полную информацию о сообщении пользователя
     $keyboard = new Keyboard();
   
