@@ -19,7 +19,7 @@ class Bot {
     function read(){
 
       // выбираем все записи 
-      $query = "SELECT * FROM " . $this->table_name . " ORDER BY `time` DESC";
+      $query = "SELECT * FROM " . $this->table_name;
         
     
       // подготовка запроса 
@@ -30,31 +30,27 @@ class Bot {
       return $stmt;
     }
 
-    // метод create - создание товаров 
+    // метод create 
     function create(){
 
       // запрос для вставки (создания) записей 
       $query = "INSERT INTO
                   " . $this->table_name . "
               SET
-                  title = :title, link = :link, description = :description, site_link = :site_link, time = :time";
+                  chat_id = :chat_id, user_id = :user_id, last_message = :last_message";
 
       // подготовка запроса 
       $stmt = $this->conn->prepare($query);
 
       // очистка 
-      $this->title=htmlspecialchars(strip_tags($this->title));
-      $this->link=htmlspecialchars(strip_tags($this->link));
-      $this->description=htmlspecialchars(strip_tags($this->description));
-      $this->site_link=htmlspecialchars(strip_tags($this->site_link));
-      $this->time=htmlspecialchars(strip_tags($this->time));
+      $this->chat_id=htmlspecialchars(strip_tags($this->chat_id));
+      $this->user_id=htmlspecialchars(strip_tags($this->user_id));
+      $this->last_message=htmlspecialchars(strip_tags($this->last_message));
  
       // привязка значений 
-      $stmt->bindParam(":title", $this->title);
-      $stmt->bindParam(":link", $this->link);
-      $stmt->bindParam(":description", $this->description); 
-      $stmt->bindParam(":site_link", $this->site_link); 
-      $stmt->bindParam(":time", $this->time);
+      $stmt->bindParam(":chat_id", $this->chat_id);
+      $stmt->bindParam(":user_id", $this->user_id);
+      $stmt->bindParam(":last_message", $this->last_message);
 
       // выполняем запрос 
       if ($stmt->execute()) {
@@ -75,7 +71,7 @@ class Bot {
                     " . $this->table_name . "
                      
                 WHERE
-                    p.id = ?
+                    `chat_id` = ? AND `user_id` = ?
                 LIMIT
                     0,1";
 
@@ -83,7 +79,8 @@ class Bot {
         $stmt = $this->conn->prepare( $query );
 
         // привязываем id товара, который будет обновлен 
-        $stmt->bindParam(1, $this->id);
+        $stmt->bindParam(1, $this->chat_id);
+        $stmt->bindParam(2, $this->user_id);
 
         // выполняем запрос 
         $stmt->execute();
@@ -91,11 +88,16 @@ class Bot {
         // получаем извлеченную строку 
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        // установим значения свойств объекта 
-        $this->title = $row['title'];
-        $this->link = $row['link'];
-        $this->description = $row['description'];
-        $this->time = $row['time'];
+        // установим значения 
+        if(!empty($row['chat_id']) AND !empty($row['user_id']) AND !empty($row['last_message'])){
+            $this->chat_id = $this->chat_id;
+            $this->user_id = $this->user_id;
+            $this->last_message = $row['last_message'];
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 
 
@@ -106,27 +108,22 @@ class Bot {
         $query = "UPDATE
                     " . $this->table_name . "
                 SET
-                    title = :title,
-                    link = :link,
-                    description = :description,
-                    time = :time
+                    last_message = :last_message
                 WHERE
-                    id = :id";
+                    chat_id = :chat_id && user_id = :user_id";
 
         // подготовка запроса 
         $stmt = $this->conn->prepare($query);
 
         // очистка 
-        $this->title=htmlspecialchars(strip_tags($this->title));
-        $this->link=htmlspecialchars(strip_tags($this->link));
-        $this->description=htmlspecialchars(strip_tags($this->description));
-        $this->id=htmlspecialchars(strip_tags($this->id));
+        $this->chat_id=htmlspecialchars(strip_tags($this->chat_id));
+        $this->user_id=htmlspecialchars(strip_tags($this->user_id));
+        $this->last_message=htmlspecialchars(strip_tags($this->last_message)); 
 
         // привязываем значения 
-        $stmt->bindParam(':title', $this->title);
-        $stmt->bindParam(':link', $this->link);
-        $stmt->bindParam(':description', $this->description);
-        $stmt->bindParam(':id', $this->id);
+        $stmt->bindParam(':chat_id', $this->chat_id);
+        $stmt->bindParam(':user_id', $this->user_id);
+        $stmt->bindParam(':last_message', $this->last_message);
 
         // выполняем запрос 
         if ($stmt->execute()) {
@@ -140,16 +137,18 @@ class Bot {
     function delete(){
 
         // запрос для удаления записи (товара) 
-        $query = "DELETE FROM " . $this->table_name . " WHERE id = ?";
+        $query = "DELETE FROM " . $this->table_name . " WHERE `chat_id`= ? AND `user_id` = ?";
 
         // подготовка запроса 
         $stmt = $this->conn->prepare($query);
 
         // очистка 
-        $this->id=htmlspecialchars(strip_tags($this->id));
+        $this->chat_id=htmlspecialchars(strip_tags($this->chat_id));
+        $this->user_id=htmlspecialchars(strip_tags($this->user_id));
 
         // привязываем id записи для удаления 
-        $stmt->bindParam(1, $this->id);
+        $stmt->bindParam(1, $this->chat_id);
+        $stmt->bindParam(2, $this->user_id);
 
         // выполняем запрос 
         if ($stmt->execute()) {
@@ -158,67 +157,39 @@ class Bot {
 
         return false;
     }
+ 
+    // используется при заполнении формы обновления товара 
+    function isExists() {
 
-    // метод search - поиск товаров 
-    function search($keywords){ 
-
-        // выборка по всем записям 
+        // запрос для чтения одной записи (товара) 
         $query = "SELECT
-                   *
+                    COUNT(*) AS result
                 FROM
-                    " . $this->table_name . " 
-                   
+                    " . $this->table_name . "
+                        
                 WHERE
-                    (title LIKE ? OR description LIKE ?) AND time LIKE ?
-                ORDER BY
-                    time DESC";
+                    `chat_id` = ? AND `user_id` = ?
+                LIMIT
+                    0,1";
 
         // подготовка запроса 
-        $stmt = $this->conn->prepare($query);
- 
-        // очистка 
-        foreach ($keywords as $keyword) {
-            $keyword = htmlspecialchars(strip_tags($keyword));
-            $keyword = "%{$keyword}%";
-        } 
+        $stmt = $this->conn->prepare( $query );
 
+        // привязываем id товара, который будет обновлен 
+        $stmt->bindParam(1, $this->chat_id);
+        $stmt->bindParam(2, $this->user_id);
 
-        // привязка 
-        if (
-        $stmt->bindParam(1, $keywords['title']) &&
-        $stmt->bindParam(2, $keywords['description']) &&
-        $stmt->bindParam(3, $keywords['time']) )
-            {
-                // выполняем запрос 
-                $stmt->execute(); 
-            }else {
-                $stmt = false;
-            }
-        
+        // выполняем запрос 
+        $stmt->execute();
 
-       return $stmt;
+        // получаем извлеченную строку 
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($row['result'] != 0){
+            return true;
+        }
+        return false;
     }
-    // метод search - поиск товаров 
-    function is_exists($keywords){
-
- 
-        $var1 = $keywords['title'];
-        $var2 = $keywords['description'];
-        $var3 = $keywords['time'];
-
-        $query = "SELECT EXISTS(SELECT 1  FROM ".$this->table_name." WHERE title LIKE ? AND description LIKE ? AND time LIKE ?)";
-        $params = array("%$var1%","%$var2%" ,"%$var3%");
-        // $this->conn->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_NUM);
-        $stmt = $this->conn->prepare($query);
-        $stmt->execute($params);
-           
-        // echo "<pre>";
-        // var_dump($stmt);
-        // echo "</pre>";
-
-       return $stmt;
-    }
-
     
 }
 ?>

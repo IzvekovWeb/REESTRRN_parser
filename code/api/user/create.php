@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $user = new Userx($db);
     
     // получаем отправленные данные
-    $data = json_decode(file_get_contents("php://input"));
+    // $data = json_decode(file_get_contents("php://input"));
 
     // убеждаемся, что данные не пусты 
 
@@ -55,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                 // сообщим пользователю 
                 echo json_encode(array(
-                    "message" => "Пользователь успешно добавлен.",
+                    "message" => " успешно добавлен.",
                     "data" => $user
                 ), JSON_UNESCAPED_UNICODE);
             }

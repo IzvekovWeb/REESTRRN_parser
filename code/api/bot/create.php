@@ -1,0 +1,74 @@
+<?php
+// необходимые HTTP-заголовки 
+header("Access-Control-Allow-Origin: *");
+header("Content-Type: application/json; charset=UTF-8");
+header("Access-Control-Allow-Methods: POST");
+header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
+
+// получаем соединение с базой данных 
+include_once '../config/database.php';
+
+// создание объекта товара 
+include_once '../objects/bot.php';
+
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+  $database = new Database();
+  $db = $database->getConnection();
+
+  $bot = new Bot($db);
+  
+  // получаем отправленные данные 
+  $postData = file_get_contents('php://input');
+  $data = json_decode($postData, true);
+
+  // убеждаемся, что данные не пусты 
+  
+  if (
+      !empty($data['chat_id']) &&
+      !empty($data['user_id']) &&
+      !empty($data['last_message'])
+  ) {
+      $data = (Object)$data;
+
+      // устанавливаем значения свойств товара 
+      $bot->chat_id = $data->chat_id;
+      $bot->user_id = $data->user_id;
+      $bot->last_message = $data->last_message;
+
+      // добавление в БД 
+      if($bot->create()){
+
+          // установим код ответа - 201 создано 
+        //   http_response_code(201);
+
+          // сообщим пользователю 
+          echo json_encode(array("message" => "Запись успешно добавлена."), JSON_UNESCAPED_UNICODE);
+      }
+
+      // если не удается создать товар, сообщим пользователю 
+      else {
+
+          // установим код ответа - 503 сервис недоступен 
+        //   http_response_code(503);
+
+          // сообщим пользователю 
+          echo json_encode(array("message" => "При добавлении произошла ошибка."), JSON_UNESCAPED_UNICODE);
+      }
+  }
+
+  // сообщим пользователю что данные неполные 
+  else {
+
+      // установим код ответа - 400 неверный запрос 
+    //   http_response_code(400);
+
+      // сообщим пользователю 
+      echo json_encode(array("message" => "Невозможно добавить запись. Данные неполные."), JSON_UNESCAPED_UNICODE);
+  }
+}else{
+  // Обработка пред-запроса
+  http_response_code(200);
+  header("Content-Type: Content-Type: text/plain; charset=UTF-8");
+}
+?>

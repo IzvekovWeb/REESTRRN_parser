@@ -1,6 +1,7 @@
 <?php
 
 include('../../../vendor/autoload.php'); //Подключаем библиотеку
+include('../../functions/bot_func.php');
  
 use Telegram\Bot;
 use Telegram\Bot\Api;
@@ -17,10 +18,10 @@ $result = $telegram -> getWebhookUpdates(); //Передаем в перемен
 
 
 
-$command = $result["message"]["text"]; //Текст сообщения
-$chat_id = $result["message"]["chat"]["id"]; //Уникальный идентификатор пользователя
-$username= $result["message"]["from"]["username"]; //Уникальный идентификатор пользователя
-// $name    = $result["message"]["from"]["first_name"]; //Уникальный идентификатор пользователя
+$command  = $result["message"]["text"]; //Текст сообщения
+$chat_id  = $result["message"]["chat"]["id"]; //Уникальный идентификатор пользователя
+$username = $result["message"]["from"]["username"]; //Уникальный идентификатор пользователя
+$user_id  = $result["message"]["from"]["id"]; //Уникальный идентификатор пользователя
 
 $keyboard = new Keyboard();
  
@@ -29,8 +30,7 @@ $reply_markup = $keyboard->make()
       ->row($keyboard->button(['text'=>'Регистрация']))
       ->row($keyboard->button(['text'=>'Информация']));
  
-switch ($command) {
-  case '/start': 
+if ($command == '/start') { 
 
     $text = "Здравствуйте, ". $username ."! Вас приветствует бот СМАНИ.". PHP_EOL . PHP_EOL .
     "Чтобы воспользоваться ботом войдите в систему. Если у вас нет аккаунта, вы можете зарегистрироваться прямо тут, нажав кнопку 'Зарегистрироваться'";
@@ -45,11 +45,22 @@ switch ($command) {
         'resize_keyboard' => true
       ]
     );
-    break;
-  case 'Войти' || '/enter': 
+  }
+  elseif ($command == 'Войти' || $command == '/enter'){
   
-    $text = "Ваш логин: " . $username. PHP_EOL . PHP_EOL .
-    "Введите пароль: ";
+    $text = "Ваш логин: " . $username. PHP_EOL . PHP_EOL . "Введите пароль: ";
+
+    $data = [
+      'chat_id' => $chat_id,
+      'user_id' => $user_id,
+      'last_message' => $command
+    ];
+
+    if (!is_exists_message_bd($data)){
+      add_message_bd($data);
+    }else {
+      update_message_bd($data);
+    }
 
     $telegram->sendMessage(
       [
@@ -62,8 +73,8 @@ switch ($command) {
         'parse_mode' => 'HTML'
       ]
     );
-    break; 
-  case 'Регистрация' || '/register': 
+    }
+    elseif ($command == 'Регистрация' || $command == '/register'){
 
     $text = "Зарегистироваться вы можете у нас най сайте <a href='https://test.newsparser.ru/'>newsparser.ru</a>";
     $telegram->sendMessage(
@@ -75,10 +86,11 @@ switch ($command) {
       ]
     );
     
-    break; 
-  case 'Информация' || '/info':  
-    $text = "Данный бот работает в тестовом режиме, поэтому все услуги предоставляются бесплатно. В дальнейшем будет введене система подписок, разделяющая поступающие новости на разные группы.". PHP_EOL . PHP_EOL .
-    "Зарегистрироваться или управлять своим аккаунтом вы можеет на сайте <a href='https://test.newsparser.ru/'>newsparser.ru</a>";
+  }elseif ($command == 'Информация' || $command == '/info'){ 
+    $text = "Данный бот работает в тестовом режиме, поэтому все услуги 
+    предоставляются бесплатно. В дальнейшем будет введене система подписок, 
+    разделяющая поступающие новости на разные группы.". PHP_EOL . PHP_EOL ."Зарегистрироваться 
+    или управлять своим аккаунтом вы можеет на сайте <a href='https://test.newsparser.ru/'>newsparser.ru</a>";
 
     $telegram->sendMessage(
       [ 
@@ -90,8 +102,7 @@ switch ($command) {
         'resize_keyboard' => true
       ]
     );
-    break;
-} 
+  }
  
 ?>
 
