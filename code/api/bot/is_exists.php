@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $postData = file_get_contents('php://input');
     $data = json_decode($postData, true);
-
+    
     if (
         !empty($data['chat_id']) &&
         !empty($data['user_id'])
@@ -35,8 +35,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       if($bot->isExists()){ 
          
         // echo json_encode(array("message" => "Такая запись уже есть"), JSON_UNESCAPED_UNICODE);
-        
-        return true;
+        echo json_encode(true, JSON_UNESCAPED_UNICODE);
+         
       }
       // если не удается проверить запись, сообщим пользователю 
       else {
@@ -46,9 +46,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 
           // сообщим пользователю 
-          echo json_encode(array("message" => "Такой записи нет"), JSON_UNESCAPED_UNICODE);
-          
-          return false;
+          echo json_encode(false, JSON_UNESCAPED_UNICODE);
+           
       }
   }
 

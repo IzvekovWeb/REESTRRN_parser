@@ -73,10 +73,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     else {
     
     // код ответа 
-    http_response_code(404);
+    // http_response_code(404);
 
     // сказать пользователю что войти не удалось 
-    // echo json_encode(array("message" => "Ошибка входа."), JSON_UNESCAPED_UNICODE);
+    echo json_encode(array("message" => "Ошибка входа."), JSON_UNESCAPED_UNICODE);
     }
 }
 else{

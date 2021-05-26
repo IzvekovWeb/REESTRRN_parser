@@ -82,7 +82,7 @@ $companies = ["Sierra","Aaron's", "Vontier","American Outdoor","Henkel","VOLKSWA
         
 
         // Отправка в телеграм
-        $t_bot->send_message($t_bot->create_message($new_news_companies), 445743340);
+        $t_bot->send_message($t_bot->create_message($new_news_companies), -434052006);
         $new_news_companies = [];
       } 
 
@@ -92,7 +92,7 @@ $companies = ["Sierra","Aaron's", "Vontier","American Outdoor","Henkel","VOLKSWA
         // $new_news_words = translate_news($new_news_words);
 
         // Отправка в телеграм
-        $t_bot->send_message($t_bot->create_message($new_news_words), 445743340);
+        $t_bot->send_message($t_bot->create_message($new_news_words), -434052006);
         $new_news_words = [];
       } 
       
