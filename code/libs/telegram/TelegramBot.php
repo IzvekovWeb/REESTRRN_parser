@@ -100,6 +100,32 @@ class Telegram {
   }
 
 
+  public static function create_message_HTML($mas)
+  {   
+      $messages_arr = [];
+      foreach ($mas as $el) {
+        $message = '';
+        $message .= "<b>Заголовок:</b> " . $el['title'] . "<br><br>";
+        $message .= "<b>Описание:</b> "  . $el['desc'] . "<br><br>";
+        $message .= "<b>Новость:</b> <a href='"  . $el['link'] . "'>ссылка</a>" . "<br><br>";
+        $message .= "<b>Сайт:</b> <a href='"  . $el['site_url'] . "'>" . $el['site_name'] ."</a>" . "<br><br>";
+        // $message .= "<b>Ключевые слова:</b> ";
+        // foreach ($el['keywords'] as $key){
+        //     $message .= $key . " ";
+        // }
+        // $message .= PHP_EOL . PHP_EOL;
+        if ($el['time'] != ''){
+          $message .= "<b>Время:</b> " . $el['time'] . "<br><br>";
+        }else{
+          $message .= "<b>Время отправки парсером:</b> " . date("Y-m-d H:i:s") . "<br><br>";
+        }
+        $message .= '============================' . "<br><br>";
+
+        $messages_arr[] .= $message;
+      } 
+      return $messages_arr;
+  }
+
 
 } 
 

@@ -70,3 +70,12 @@ else {
     echo json_encode(array("message" => "Невозможно добавить работу. Данные неполные."), JSON_UNESCAPED_UNICODE);
 }
 ?>
+
+
+<!-- create table news (
+    title varchar(255),
+    link varchar(255),
+    description varchar(255),
+    site_link varchar(255),
+    time timestamp DEFAULT CURRENT_TIMESTAMP
+); -->

@@ -40,7 +40,7 @@ function add_news_bd($news){
 */
 function is_news_exist_bd($news){
 
-  // Проверка: ксть ли новости в БД
+  // Проверка: есть ли новости в БД
   $check_news_bd = curl_init();
 
   curl_setopt_array($check_news_bd, array(

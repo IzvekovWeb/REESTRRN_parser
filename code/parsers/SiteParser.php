@@ -22,8 +22,9 @@ class siteParser {
     // Обёртка новостей
     $articles = $document->find($tags['article']);
     $values = Array();
-
+    
     // echo "Тег статьи: " . $tags['article'] . "<br>";
+
 
     if (!empty($articles)) {
 
@@ -59,23 +60,25 @@ class siteParser {
         // Проверяем на наличие ключевых слов в заголовке или описании
         if(!empty($article_el['title']) && !empty($article_el['link'])){ 
 
-          foreach ($this->keywords as $key){ 
+          // foreach ($this->keywords as $key){ 
             
-            // Если ключевое слово есть в заголовке или описании
-            if (stripos($article_el['title'], $key) !== false || stripos($article_el['desc'], $key) !== false){
+          //   // Если ключевое слово есть в заголовке или описании
+          //   if (stripos($article_el['title'], $key) !== false || stripos($article_el['desc'], $key) !== false){
  
-              // Допускаем новость и записываем ключевое слово
-              $article_el['allow'] = true;
-              array_push($article_el['keywords'], $key);
-            }
-          }
+          //     // Допускаем новость и записываем ключевое слово
+          //     $article_el['allow'] = true;
+          //     array_push($article_el['keywords'], $key);
+          //   }
+          // }
+
+
+
+
           // Добавляем данные одной заметки в массив со всеми заметками
 
           // dump($article_el); 
 
-          if($article_el['allow']){
-            array_push($values, $article_el);
-          }
+          array_push($values, $article_el);
         }
       }
     }
@@ -164,133 +167,16 @@ class siteParser {
   public function set_tags($site_name){
 
     $tags = null;
-
-    if ($site_name == 'prnewswire.com'){ 
+    if ($site_name == 'aoreestr.ru'){ 
       $tags = [
-        'article' => 'div.row > div.card',
-        'title' => 'h3 > a',
-        'desc' => 'p',
-        'link' => 'h3 > a',
-        'time' => 'small',
+        'article' => 'div.Row > div.NewsItem',
+        'title' => 'h3.NewsItem__Title',
+        'desc' => null,
+        'link' => 'a.NewsItem__TitleLink',
+        'time' => 'span.NewsItem__DateAdd',
       ]; 
-    }elseif ($site_name == 'businesswire.com'){
-       
-      $tags = [
-        'article' => '.bwNewsList > li',
-        'title' => 'div > a > span', 
-        'desc' => 'null',
-        'link' => 'div > a.bwTitleLink',
-        'time' => 'div.bwTimestamp > time',
-      ]; 
-      
-
-    }elseif ($site_name == 'globenewswire.com'){
-      $tags = [
-        'article' => 'div.rl-container > div.results-link',
-        'title' => 'h1.post-title16px > a',
-        'desc' => 'h1.post-title16px + p',
-        'link' => 'h1.post-title16px > a',
-        'time' => 'null',
-      ];
-    }
-    elseif ($site_name == 'finance.yahoo.com'){
-      $tags = [
-        'article' => 'div#Fin-Stream > ul > li',
-        'title' => 'h3 > a',
-        'desc' => 'p',
-        'link' => 'h3 > a',
-        'time' => 'null',
-      ];
-    }
-
-    // Парсится через json
-    elseif ($site_name == 'streetinsider.com'){
-      // JSON
-      $tags = [
-        'article' => 'id',
-        'title' => 'headline',
-        'desc' => 'body',
-        'link' => 'id',
-        'time' => 'date',
-      ];
-    }
-    // elseif ($site_name == 'bloomberg.com'){
-    //   $tags = [
-    //     'article' => 'article[data-type="article"]',
-    //     'title' => 'h3[class$="headline"] > a',
-    //     'desc' => 'null',
-    //     'link' => 'h3[class$="headline"] > a',
-    //     'time' => 'h3[class$="headline"] > time',
-    //   ];
-    // }
-    // elseif ($site_name == 'cnbc.com'){
-    //   $tags = [
-    //     'article' => 'div[class="Card-standardBreakerCard"]',
-    //     'title' => 'div[class="Card-titleContainer"] > a > div > div',
-    //     'desc' => 'null',
-    //     'link' => 'div[class="Card-titleContainer"] > a > div > div',
-    //     'time' => 'null',
-    //   ];
-    // } 
-    elseif ($site_name == 'barrons.com'){
-      $tags = [
-        'article' => 'article',
-        'title' => 'h3[class^="BarronsTheme--headline"] > a',
-        'desc' => 'p[class^="BarronsTheme--summary"]',
-        'link' => 'h3[class^="BarronsTheme--headline"] > a',
-        'time' => 'div[class^="BarronsTheme--timestamp"] > p',
-      ];
-    }
-    elseif ($site_name == 'seekingalpha.com'){
-      $tags = [
-        'article' => 'li[class^="mc"]',
-        'title' => 'div.title > a',
-        'desc' => 'null',
-        'link' => 'div.title > a',
-        'time' => 'null',
-      ];
-    }
-    elseif ($site_name == 'fda.gov'){
-      $tags = [
-        'article' => '.views-field',
-        'title' => 'span > a',
-        'desc' => 'null',
-        'link' => 'span > a',
-        'time' => 'span > a > time',
-      ];
-    }
-    elseif ($site_name == 'mobile.reuters.com'){
-      $tags = [
-        'article' => 'article.article',
-        'title'   => 'h3.article-heading > a',
-        'desc'    => 'null',
-        'link'    => 'h3.article-heading > a',
-        'time'    => 'null',
-      ];
-    }
-    elseif ($site_name == 'wsj.com'){
-      $tags = [
-        'article' => 'article',
-        'title'   => 'h2[class^="WSJTheme--headline"] > a',
-        'desc'    => 'null',
-        'link'    => 'h2[class^="WSJTheme--headline"] > a',
-        'time'    => 'p[class^="WSJTheme--timestamp"]',
-      ];
-    }
-    elseif ($site_name == 'thefly.com'){
-      $tags = [
-        'article' => 'tr[id^="news"]',
-        'title'   => '.story_header > a > span',
-        'desc'    => 'p.abstract',
-        'link'    => '.story_header > a',
-        'time'    => 'null', // в теории настроить можно
-      ];
-    }
-    
-    
-
-    
     return $tags;
+    }
   }
 }
 ?>
