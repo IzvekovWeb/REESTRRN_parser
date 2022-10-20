@@ -38,8 +38,11 @@ $new_news = Array();
 
             // Проверяем есть ли такая новость в БД
             // Ответ преобразуем в boolean
-            $is_news_exist = filter_var(is_news_exist_bd($one_news), FILTER_VALIDATE_BOOLEAN, ['flags'=>FILTER_NULL_ON_FAILURE]);
- 
+            // $is_news_exist = filter_var(is_news_exist_bd($one_news), FILTER_VALIDATE_BOOLEAN, ['flags'=>FILTER_NULL_ON_FAILURE]);
+            $is_news_exist = is_news_exist_bd($one_news);
+
+            
+            // dump($is_news_exist);
             // Отсеиваем уже добавленный\отправленные новости
             if ($is_news_exist == "true") {
 
@@ -75,6 +78,7 @@ $new_news = Array();
         send_mail($messages);
 
         $new_news = [];
+        echo '111';
       } 
       
     }

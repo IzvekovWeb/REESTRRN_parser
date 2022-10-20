@@ -203,25 +203,24 @@ class News {
     }
     
     function is_exists($keywords){
-
         $title = pg_escape_string(htmlspecialchars(strip_tags($keywords['title'])));
         $link = htmlspecialchars(strip_tags($keywords['link']));
         $time = htmlspecialchars(strip_tags($keywords['time']));
 
-        $query = "SELECT EXISTS(SELECT 1 FROM news WHERE title LIKE :title AND link LIKE :link AND time = :time)";
+        $query = "SELECT EXISTS(SELECT 1 FROM news as n WHERE title LIKE :title AND link LIKE :link AND time=:time)";
 
         $stmt = $this->conn->prepare($query);
 
         // привязка значений 
-        $stmt->bindParam(":title", $title, PDO::PARAM_STR);
+        $stmt->bindParam(":title", $title);
         $stmt->bindParam(":link", $link);
         $stmt->bindParam(":time", $time);
+
 
         $stmt->execute();
 
        return $stmt;
     }
-
     
 }
 ?>

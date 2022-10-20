@@ -5,8 +5,8 @@
 
 require_once('libs/Yandex/YToken.php');
 
-$BASE_URL = "http://parser";
 $API_URL = "/code/api";
+$BASE_URL = "http://parser".$API_URL;
 /*
 *  Функция: добавить новость в БД
 *  Вход: массив с 1 новостью
@@ -16,10 +16,10 @@ function add_news_bd($news){
   // Добавление новости в БД
   $add_news_bd = curl_init();
   
-  global $BASE_URL, $API_URL;
+  global $BASE_URL;
 
   curl_setopt_array($add_news_bd, array(
-      CURLOPT_URL => $BASE_URL . $API_URL . '/news/create.php',
+      CURLOPT_URL => $BASE_URL . '/news/create.php',
       CURLOPT_RETURNTRANSFER => true,
       CURLOPT_POST => true,
       CURLOPT_POSTFIELDS => http_build_query(array(
@@ -44,23 +44,32 @@ function add_news_bd($news){
 */
 function is_news_exist_bd($news){
 
+  global $BASE_URL;
+
   // Проверка: есть ли новости в БД
   $check_news_bd = curl_init();
 
-  global $BASE_URL, $API_URL;
+  $dataArray = [
+    'title' => pg_escape_string(htmlspecialchars(strip_tags($news['title']))),
+    'link' => htmlspecialchars(strip_tags($news['link'])), 
+    'time' => htmlspecialchars(strip_tags($news['time']))
+  ];
+
+  $url = $BASE_URL . '/news/is_exists.php';
+  $data = http_build_query($dataArray);
+  $getUrl = $url."?".$data;
 
   curl_setopt_array($check_news_bd, array(
-      CURLOPT_URL => $BASE_URL . $API_URL . '/news/is_exists.php',
+      CURLOPT_URL => $BASE_URL . '/news/is_exists.php',
       CURLOPT_RETURNTRANSFER => true,
-      CURLOPT_POST => true,
-      CURLOPT_POSTFIELDS => http_build_query(array(
-        'title'       => pg_escape_string(htmlspecialchars(strip_tags($news['title']))),
-        'link'        => htmlspecialchars(strip_tags($news['link'])),
-        'time'        => htmlspecialchars(strip_tags($news['time'])),
-      ))
+      CURLOPT_URL => $getUrl
   ));
   $response = curl_exec($check_news_bd);
   curl_close($check_news_bd);
+
+  echo "<pre>";
+  var_dump($response);
+  echo "</pre>";
  
   return $response;
 }
