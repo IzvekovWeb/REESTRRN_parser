@@ -30,7 +30,8 @@ function send_mail($news){
     $mail->setFrom($yourEmail, 'Новостная рассылка');
 
     // кому - получатель письма
-    $mail->addAddress('aizvekov@reestrrn.ru', 'Имя Получателя');  // кому
+    // $mail->addAddress('aizvekov@reestrrn.ru', 'Александр');  // кому
+    $mail->addAddress('reestr.parser@yandex.ru', 'Parser');  // кому
 
     $mail->Subject = 'Последние новости';  // тема письма
 

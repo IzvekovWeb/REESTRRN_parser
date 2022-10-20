@@ -115,31 +115,7 @@ function start($words=[], $companies=[]){
     echo $site. "<br>";
 
     // Выбираем параметры и способ запроса
-    if ($site == "businesswire.com") {
-      $opts = array('http' => array(
-        "authority" => "cdn.cookielaw.org",
-        "method"=>  "GET",
-        "path" => "/consent/a2007379-c22b-41e8-8743-1bbfd2cbb24a/a2007379-c22b-41e8-8743-1bbfd2cbb24a.json",
-        "scheme" => "https",
-        "method" => "GET",
-        "header" => 'accept:*/*'
-        ."accept-encoding: gzip, deflate, br"
-        ."accept-language: ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7"
-        ."cache-control: no-cache"
-        ."dnt: 1"
-        ."origin: https://www.businesswire.com"
-        ."pragma: no-cache"
-        ."referer: https://www.businesswire.com/portal/site/home/news/"
-        ."sec-fetch-dest: empty"
-        ."sec-fetch-mode: cors"
-        ."sec-fetch-site: cross-site"
-        ."user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36"
-      ));
-        
-    $context = stream_context_create($opts); 
-    $html = file_get_contents($url['url'],false,$context);
-    }
-    elseif ($url['type'] == 'json'){
+    if ($url['type'] == 'json'){
       $json =  file_get_contents_curl($url['url']);
     } 
     else {

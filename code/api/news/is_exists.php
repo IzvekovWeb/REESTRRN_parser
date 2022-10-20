@@ -15,20 +15,16 @@ $db = $database->getConnection();
 // инициализируем объект 
 $news = new news($db);
 
-if (isset($_POST["title"]) || isset($_POST["description"]) || isset($_POST["time"])){
+if (isset($_GET["title"]) || isset($_GET["link"]) || isset($_GET["time"])){
 
 }
 
 // получаем ключевые слова 
 $keywords = Array (
-    'title'         => isset($_POST["title"]) ? $_POST["title"] : "",
-    'description'   => isset($_POST["description"]) ? $_POST["description"] : "",
-    'time'          => isset($_POST["time"]) ? $_POST["time"] : "",
+    'title'     => isset($_GET["title"]) ? $_GET["title"] : "",
+    'link'      => isset($_GET["link"]) ? $_GET["link"] : "",
+    'time'      => isset($_GET["time"]) ? $_GET["time"] : "",
 );
-
-// echo '<pre>';
-// var_dump($keywords);
-// echo '</pre>';
 
 // Не более 3х параметров
 if ( count($keywords) > 3 ) {
@@ -39,11 +35,6 @@ if ( count($keywords) > 3 ) {
  
 // запрос товаров 
 $stmt = $news->is_exists($keywords);
-
-
-// echo '<pre>';
-// var_dump($stmt);
-// echo '</pre>';
 
 $num = $stmt->fetch()[0]; 
 

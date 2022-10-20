@@ -23,16 +23,16 @@ $news->id = isset($_GET['id']) ? $_GET['id'] : die();
 // прочитаем детали товара для редактирования 
 $news->readOne();
 
-if ($news->name!=null) {
+if ($news->title!=null) {
 
     // создание массива 
     $news_arr = array(
         "id" =>  $news->id,
-        "name" => $news->name,
+        "title" => $news->title,
         "description" => $news->description,
         "link" => $news->link,
-        "img_link" => $news->img_link,
-        "create" => $news->create
+        "site_link" => $news->site_link,
+        "time" => $news->time
     );
 
     // код ответа - 200 OK 
@@ -47,6 +47,6 @@ else {
     http_response_code(404);
 
     // сообщим пользователю, что товар не существует 
-    echo json_encode(array("message" => "Товар не существует."), JSON_UNESCAPED_UNICODE);
+    echo json_encode(array("message" => "Запись не существует."), JSON_UNESCAPED_UNICODE);
 }
 ?>

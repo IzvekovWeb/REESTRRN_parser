@@ -5,17 +5,21 @@
 
 require_once('libs/Yandex/YToken.php');
 
+$BASE_URL = "http://parser";
+$API_URL = "/code/api";
 /*
 *  Функция: добавить новость в БД
 *  Вход: массив с 1 новостью
 *  Выход: результат добавление
 */
 function add_news_bd($news){
-
   // Добавление новости в БД
   $add_news_bd = curl_init();
+  
+  global $BASE_URL, $API_URL;
+
   curl_setopt_array($add_news_bd, array(
-      CURLOPT_URL => 'https://test.newsparser.ru/code/api/news/create.php',
+      CURLOPT_URL => $BASE_URL . $API_URL . '/news/create.php',
       CURLOPT_RETURNTRANSFER => true,
       CURLOPT_POST => true,
       CURLOPT_POSTFIELDS => http_build_query(array(
@@ -43,13 +47,15 @@ function is_news_exist_bd($news){
   // Проверка: есть ли новости в БД
   $check_news_bd = curl_init();
 
+  global $BASE_URL, $API_URL;
+
   curl_setopt_array($check_news_bd, array(
-      CURLOPT_URL => 'https://test.newsparser.ru/code/api/news/is_exists.php',
+      CURLOPT_URL => $BASE_URL . $API_URL . '/news/is_exists.php',
       CURLOPT_RETURNTRANSFER => true,
       CURLOPT_POST => true,
       CURLOPT_POSTFIELDS => http_build_query(array(
-        'title'       => htmlspecialchars(strip_tags($news['title'])),
-        'description' => htmlspecialchars(strip_tags($news['desc'])),
+        'title'       => pg_escape_string(htmlspecialchars(strip_tags($news['title']))),
+        'link'        => htmlspecialchars(strip_tags($news['link'])),
         'time'        => htmlspecialchars(strip_tags($news['time'])),
       ))
   ));
@@ -116,7 +122,7 @@ function translate_text($text, $token) {
         'Content-Type:application/json',
         'Authorization: Bearer ' . $token
     )
-); 
+  ); 
   curl_setopt($ch, CURLOPT_POSTFIELDS, $data_string);  
   $result = curl_exec($ch);
 

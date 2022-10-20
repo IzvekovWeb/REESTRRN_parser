@@ -34,9 +34,10 @@ if ($num>0) {
 
         $news_item=array(
             "id" => $id,
-            "name" => $name,
+            "title" => $title,
             "description" => html_entity_decode($description),
             "link" => $link,
+            "site_link" => $site_link,
             "time" => $time
         );
 

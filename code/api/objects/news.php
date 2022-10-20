@@ -22,7 +22,7 @@ class News {
     function read(){
 
       // выбираем все записи 
-      $query = "SELECT * FROM " . $this->table_name . " ORDER BY `time` DESC";
+      $query = "SELECT * FROM " . $this->table_name . " ORDER BY time DESC";
         
     
       // подготовка запроса 
@@ -37,18 +37,16 @@ class News {
     function create(){
 
       // запрос для вставки (создания) записей 
-      $query = "INSERT INTO
-                  " . $this->table_name . "
-              SET
-                  title = :title, link = :link, description = :description, site_link = :site_link, time = :time";
+      $query = "INSERT INTO " . $this->table_name . "
+                (title, time, link, description, site_link) VALUES (:title, :time, :link, :description, :site_link)";
 
       // подготовка запроса 
       $stmt = $this->conn->prepare($query);
 
       // очистка 
-      $this->title=htmlspecialchars(strip_tags($this->title));
+      $this->title=pg_escape_string(htmlspecialchars(strip_tags($this->title)));
       $this->link=htmlspecialchars(strip_tags($this->link));
-      $this->description=htmlspecialchars(strip_tags($this->description));
+      $this->description=trim(pg_escape_string(htmlspecialchars(strip_tags($this->description))));
       $this->site_link=htmlspecialchars(strip_tags($this->site_link));
       $this->time=htmlspecialchars(strip_tags($this->time));
  
@@ -78,7 +76,7 @@ class News {
                     " . $this->table_name . "
                      
                 WHERE
-                    p.id = ?
+                    id = ?
                 LIMIT
                     0,1";
 
@@ -99,6 +97,8 @@ class News {
         $this->link = $row['link'];
         $this->description = $row['description'];
         $this->time = $row['time'];
+
+        echo $this->title;
     }
 
 
@@ -201,23 +201,23 @@ class News {
 
        return $stmt;
     }
-    // метод search - поиск товаров 
+    
     function is_exists($keywords){
 
- 
-        $var1 = $keywords['title'];
-        $var2 = $keywords['description'];
-        $var3 = $keywords['time'];
+        $title = pg_escape_string(htmlspecialchars(strip_tags($keywords['title'])));
+        $link = htmlspecialchars(strip_tags($keywords['link']));
+        $time = htmlspecialchars(strip_tags($keywords['time']));
 
-        $query = "SELECT EXISTS(SELECT 1  FROM ".$this->table_name." WHERE title LIKE ? AND description LIKE ? AND time LIKE ?)";
-        $params = array("%$var1%","%$var2%" ,"%$var3%");
-        // $this->conn->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_NUM);
+        $query = "SELECT EXISTS(SELECT 1 FROM news WHERE title LIKE :title AND link LIKE :link AND time = :time)";
+
         $stmt = $this->conn->prepare($query);
-        $stmt->execute($params);
-           
-        // echo "<pre>";
-        // var_dump($stmt);
-        // echo "</pre>";
+
+        // привязка значений 
+        $stmt->bindParam(":title", $title, PDO::PARAM_STR);
+        $stmt->bindParam(":link", $link);
+        $stmt->bindParam(":time", $time);
+
+        $stmt->execute();
 
        return $stmt;
     }

@@ -1,6 +1,6 @@
 <?php
 // необходимые HTTP-заголовки 
-header("Access-Control-Allow-Origin: https://test.newsparser.ru");
+header("Access-Control-Allow-Origin: http://parser");
 header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Max-Age: 3600");
@@ -21,13 +21,11 @@ $news = new News($db);
 // получаем отправленные данные 
 $data = $_POST;
 $files = $_FILES;
- 
-
 // убеждаемся, что данные не пусты 
- 
 if (
     !empty($data['title']) &&
-    !empty($data['link'])
+    !empty($data['link']) &&
+    !empty($data['time'])
 ) {
     $data = (Object)$data;
     $files = (Object)$files;
@@ -46,7 +44,7 @@ if (
         http_response_code(201);
 
         // сообщим пользователю 
-        echo json_encode(array("message" => "Работа успешно добавлена."), JSON_UNESCAPED_UNICODE);
+        echo json_encode(array("message" => "Новость успешно добавлена."), JSON_UNESCAPED_UNICODE);
     }
 
     // если не удается создать товар, сообщим пользователю 
@@ -67,7 +65,7 @@ else {
     http_response_code(400);
 
     // сообщим пользователю 
-    echo json_encode(array("message" => "Невозможно добавить работу. Данные неполные."), JSON_UNESCAPED_UNICODE);
+    echo json_encode(array("message" => "Невозможно добавить новость. Данные неполные."), JSON_UNESCAPED_UNICODE);
 }
 ?>
 
