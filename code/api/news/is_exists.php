@@ -15,14 +15,14 @@ $db = $database->getConnection();
 // инициализируем объект 
 $news = new news($db);
 
-if (isset($_GET["title"]) || isset($_GET["link"]) || isset($_GET["time"])){
+if (isset($_GET["title"]) || isset($_GET["site_link"]) || isset($_GET["time"])){
 
 }
 
 // получаем ключевые слова 
 $keywords = Array (
     'title'     => isset($_GET["title"]) ? $_GET["title"] : "",
-    'link'      => isset($_GET["link"]) ? $_GET["link"] : "",
+    'site_link'      => isset($_GET["site_link"]) ? $_GET["site_link"] : "",
     'time'      => isset($_GET["time"]) ? $_GET["time"] : "",
 );
 

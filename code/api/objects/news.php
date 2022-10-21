@@ -38,17 +38,18 @@ class News {
 
       // запрос для вставки (создания) записей 
       $query = "INSERT INTO " . $this->table_name . "
-                (title, time, link, description, site_link) VALUES (:title, :time, :link, :description, :site_link)";
+                (title, time, link, description, site_link) 
+                VALUES (:title, :time, :link, :description, :site_link)";
 
       // подготовка запроса 
       $stmt = $this->conn->prepare($query);
 
       // очистка 
-      $this->title=pg_escape_string(htmlspecialchars(strip_tags($this->title)));
-      $this->link=htmlspecialchars(strip_tags($this->link));
-      $this->description=trim(pg_escape_string(htmlspecialchars(strip_tags($this->description))));
-      $this->site_link=htmlspecialchars(strip_tags($this->site_link));
-      $this->time=htmlspecialchars(strip_tags($this->time));
+    //   $this->title=pg_escape_string(htmlspecialchars(strip_tags($this->title)));
+    //   $this->link=htmlspecialchars(strip_tags($this->link));
+    //   $this->description=pg_escape_string(htmlspecialchars(trim(strip_tags($this->description))));
+    //   $this->site_link=htmlspecialchars(strip_tags($this->site_link));
+    //   $this->time=htmlspecialchars(strip_tags($this->time));
  
       // привязка значений 
       $stmt->bindParam(":title", $this->title);
@@ -100,7 +101,6 @@ class News {
 
         echo $this->title;
     }
-
 
     // метод update() - обновление товара 
     function update(){
@@ -203,22 +203,21 @@ class News {
     }
     
     function is_exists($keywords){
-        $title = pg_escape_string(htmlspecialchars(strip_tags($keywords['title'])));
-        $link = htmlspecialchars(strip_tags($keywords['link']));
-        $time = htmlspecialchars(strip_tags($keywords['time']));
+        $title = $keywords['title'];
+        $link = $keywords['site_link'];
+        $time = $keywords['time'];
 
-        $query = "SELECT EXISTS(SELECT 1 FROM news as n WHERE title LIKE :title AND link LIKE :link AND time=:time)";
+        $query = "SELECT EXISTS(SELECT 1 FROM news as n WHERE title LIKE :title AND site_link LIKE :site_link AND time=:time)";
 
         $stmt = $this->conn->prepare($query);
 
         // привязка значений 
         $stmt->bindParam(":title", $title);
-        $stmt->bindParam(":link", $link);
+        $stmt->bindParam(":site_link", $link);
         $stmt->bindParam(":time", $time);
 
 
         $stmt->execute();
-
        return $stmt;
     }
     

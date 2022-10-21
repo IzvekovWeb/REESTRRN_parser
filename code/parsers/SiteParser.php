@@ -71,9 +71,6 @@ class siteParser {
           //   }
           // }
 
-
-
-
           // Добавляем данные одной заметки в массив со всеми заметками
 
           // dump($article_el); 
@@ -175,8 +172,16 @@ class siteParser {
         'link' => 'a.NewsItem__TitleLink',
         'time' => 'span.NewsItem__DateAdd',
       ]; 
-    return $tags;
+    }elseif($site_name == 'vrk.ru'){
+      $tags = [
+        'article' => 'div.faq-page > div > div.news',
+        'title' => 'a.tit > span',
+        'desc' => 'p',
+        'link' => 'a.tit',
+        'time' => 'div.date',
+      ];
     }
+    return $tags;
   }
 }
 ?>

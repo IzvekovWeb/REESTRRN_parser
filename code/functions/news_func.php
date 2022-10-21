@@ -50,9 +50,9 @@ function is_news_exist_bd($news){
   $check_news_bd = curl_init();
 
   $dataArray = [
-    'title' => pg_escape_string(htmlspecialchars(strip_tags($news['title']))),
-    'link' => htmlspecialchars(strip_tags($news['link'])), 
-    'time' => htmlspecialchars(strip_tags($news['time']))
+    'title' => $news['title'],
+    'site_link' => $news['site_url'], 
+    'time' => $news['time']
   ];
 
   $url = $BASE_URL . '/news/is_exists.php';
@@ -67,10 +67,6 @@ function is_news_exist_bd($news){
   $response = curl_exec($check_news_bd);
   curl_close($check_news_bd);
 
-  echo "<pre>";
-  var_dump($response);
-  echo "</pre>";
- 
   return $response;
 }
 
