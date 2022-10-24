@@ -100,8 +100,9 @@ function start($words=[], $companies=[]){
   // Стартовые данные 
   // Позже будут в БД
   $urls = [
-    'aoreestr.ru'    => ['url' => 'https://aoreestr.ru/press','type' => 'html'],
-    'vrk.ru'    => ['url' => 'https://www.vrk.ru/news','type' => 'html'],
+    'aoreestr.ru'     => ['url' => 'https://aoreestr.ru/press','type' => 'html'],
+    'vrk.ru'          => ['url' => 'https://www.vrk.ru/news','type' => 'html'],
+    'mrz.ru'          => ['url' => 'http://mrz.ru/company/news/','type' => 'html'],
   ];
   
   $keywords = array_merge($words, $companies);

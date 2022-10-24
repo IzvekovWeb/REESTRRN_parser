@@ -38,12 +38,12 @@ class News {
 
       // запрос для вставки (создания) записей 
       $query = "INSERT INTO " . $this->table_name . "
-                (title, time, link, description, site_link) 
+                        (title, time, link, description, site_link) 
                 VALUES (:title, :time, :link, :description, :site_link)";
 
       // подготовка запроса 
       $stmt = $this->conn->prepare($query);
-
+    
       // очистка 
     //   $this->title=pg_escape_string(htmlspecialchars(strip_tags($this->title)));
     //   $this->link=htmlspecialchars(strip_tags($this->link));
@@ -57,6 +57,7 @@ class News {
       $stmt->bindParam(":description", $this->description); 
       $stmt->bindParam(":site_link", $this->site_link); 
       $stmt->bindParam(":time", $this->time);
+
 
       // выполняем запрос 
       if ($stmt->execute()) {

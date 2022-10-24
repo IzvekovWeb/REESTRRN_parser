@@ -7,6 +7,7 @@ header("Content-Type: application/json; charset=UTF-8");
 include_once '../config/core.php';
 include_once '../config/database.php';
 include_once '../objects/news.php';
+include_once '../functions.php';
 
 // создание подключения к БД 
 $database = new Database();
@@ -23,8 +24,10 @@ if (isset($_GET["title"]) || isset($_GET["site_link"]) || isset($_GET["time"])){
 $keywords = Array (
     'title'     => isset($_GET["title"]) ? $_GET["title"] : "",
     'site_link'      => isset($_GET["site_link"]) ? $_GET["site_link"] : "",
-    'time'      => isset($_GET["time"]) ? $_GET["time"] : "",
+    'time'      => isset($_GET["time"]) ? time_format($_GET["time"]) : "",
 );
+
+
 
 // Не более 3х параметров
 if ( count($keywords) > 3 ) {

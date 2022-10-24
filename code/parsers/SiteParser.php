@@ -36,11 +36,15 @@ class siteParser {
 
         // dump($article);
 
-        // Задаём ссылку на статью
-        if (strpos($article->find($tags['link'])->attr('href'), 'http') || strpos($article->find($tags['link'])->attr('href'), $this->site) ) {
-          $link = $article->find($tags['link'])->attr('href');
-        }else {
-          $link = $this->site . $article->find($tags['link'])->attr('href');
+        if ($tags['link'] != null) {
+          // Задаём ссылку на статью
+          if (strpos($article->find($tags['link'])->attr('href'), 'http') || strpos($article->find($tags['link'])->attr('href'), $this->site) ) {
+            $link = $article->find($tags['link'])->attr('href');
+          }else {
+            $link = $this->site . $article->find($tags['link'])->attr('href');
+          }
+        }else{
+          $link = $this->url;
         }
 
         // Отбираем нужные данные и заносим в массив
@@ -179,6 +183,15 @@ class siteParser {
         'desc' => 'p',
         'link' => 'a.tit',
         'time' => 'div.date',
+      ];
+    }
+    elseif($site_name == 'mrz.ru'){
+      $tags = [
+        'article' => 'div.nl-news > div.nl-item',
+        'title' => 'h3.nl-title',
+        'desc' => null,
+        'link' => null,
+        'time' => 'p.nl-date',
       ];
     }
     return $tags;
