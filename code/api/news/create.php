@@ -14,9 +14,6 @@ include_once '../config/database.php';
 include_once '../objects/news.php';
 include_once '../functions.php';
 
-// use functions\time_format;
-
-
 $database = new Database();
 $db = $database->getConnection();
 

@@ -52,7 +52,7 @@ class siteParser {
           'title'     => trim($article->find($tags['title'])->text()),
           'desc'      => cutStr(trim($article->find($tags['desc'])->text()), 650),
           'link'      => $link,
-          'time'      => trim($article->find($tags['time'])->text()),
+          'time'      => trim(preg_replace('/[\t\n\r\s]+/', '', $article->find($tags['time'])->text())),
           'allow'     => false,
           'keywords'  => [],
           'site_url'  => $this->url,
@@ -192,6 +192,15 @@ class siteParser {
         'desc' => null,
         'link' => null,
         'time' => 'p.nl-date',
+      ];
+    }
+    elseif($site_name == 'rrost.ru'){
+      $tags = [
+        'article' => 'div.events__r > ul > li',
+        'title' => 'a.enents__link',
+        'desc' => 'p',
+        'link' => 'a.enents__link',
+        'time' => 'div.date',
       ];
     }
     return $tags;
