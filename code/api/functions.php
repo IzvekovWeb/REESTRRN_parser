@@ -17,13 +17,13 @@ function time_format($time){
     ];
   if (count(explode(' ', $time)) == 3){
       $explode_date = explode(' ', $time);
-      $month_num = array_search( $explode_date[1], $months);
+      $month_num = array_search(mb_strtolower($explode_date[1]), $months);
       $date = date("Y-m-d", strtotime($explode_date[0].'-'.$month_num.'-'.$explode_date[2]));
   }else{
       try{
           $date = date("Y-m-d", strtotime($time));
       }catch(Exception $e){
-          echo 'Ошибка преобразования даты. Запишем текущую дату';
+          echo 'Ошибка преобразования даты. Запишем 1970-1-1';
       }
   }
   return $date;

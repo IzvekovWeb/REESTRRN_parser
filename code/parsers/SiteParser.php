@@ -25,7 +25,6 @@ class siteParser {
     
     // echo "Тег статьи: " . $tags['article'] . "<br>";
 
-
     if (!empty($articles)) {
 
       // dump($articles);
@@ -34,32 +33,41 @@ class siteParser {
 
         $article = pq($art);   
 
-        // dump($article);
+        // dump($article);        
 
         if ($tags['link'] != null) {
           // Задаём ссылку на статью
           if (strpos($article->find($tags['link'])->attr('href'), 'http') || strpos($article->find($tags['link'])->attr('href'), $this->site) ) {
             $link = $article->find($tags['link'])->attr('href');
+          }elseif($tags['link'] == 'CURRENT') {
+            $link = $article->attr('href');
           }else {
-            $link = $this->site . $article->find($tags['link'])->attr('href');
+            $link = $this->site . $article->parents('a')->attr('href');
           }
         }else{
           $link = $this->url;
         }
+
+        $time = $article->find($tags['time'])->text();
+        if (preg_match('/[\p{Cyrillic}]/u', $time)) {
+          $time = preg_replace('/[\t\n\r\s]+/', ' ', $time);
+        }else {
+          $time = preg_replace('/[\t\n\r\s]+/', '', $time);
+        };
 
         // Отбираем нужные данные и заносим в массив
         $article_el = [
           'title'     => trim($article->find($tags['title'])->text()),
           'desc'      => cutStr(trim($article->find($tags['desc'])->text()), 650),
           'link'      => $link,
-          'time'      => trim(preg_replace('/[\t\n\r\s]+/', '', $article->find($tags['time'])->text())),
+          'time'      => trim($time),
           'allow'     => false,
           'keywords'  => [],
           'site_url'  => $this->url,
           'site_name' => $this->site,
         ]; 
  
-        // dump($article_el); 
+        dump($article_el); 
 
         // Проверяем на наличие ключевых слов в заголовке или описании
         if(!empty($article_el['title']) && !empty($article_el['link'])){ 
@@ -201,6 +209,33 @@ class siteParser {
         'desc' => 'p',
         'link' => 'a.enents__link',
         'time' => 'div.date',
+      ];
+    }
+    elseif($site_name == 'newreg.ru'){
+      $tags = [
+        'article' => 'main.site-main > article.cat-event-list',
+        'title' => 'header.entry-header > h2 > a',
+        'desc' => 'div.entry-content > div.cat-event-excerpt > div',
+        'link' => 'header.entry-header > h2 > a',
+        'time' => 'div.entry-content > div.cat-event-excerpt > div.event-date-archive',
+      ];
+    }
+    elseif($site_name == 'profrc.ru'){
+      $tags = [
+        'article' => 'ul.b-news-list > li > article > div.b-news-preview__text',
+        'title' => 'h3.b-news-preview__title',
+        'desc' => null,
+        'link' => 'a',
+        'time' => 'time.b-news-time',
+      ];
+    }
+    elseif($site_name == 'paritet.ru'){
+      $tags = [
+        'article' => 'div.pir-news__container > a.pir-news__wrap',
+        'title' => 'h3.pir-news__title',
+        'desc' => 'p',
+        'link' => 'CURRENT',
+        'time' => 'span.pir-news__date',
       ];
     }
     return $tags;

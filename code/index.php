@@ -103,7 +103,11 @@ function start($words=[], $companies=[]){
     // 'aoreestr.ru'     => ['url' => 'https://aoreestr.ru/press','type' => 'html'],
     // 'vrk.ru'          => ['url' => 'https://www.vrk.ru/news','type' => 'html'],
     // 'mrz.ru'          => ['url' => 'http://mrz.ru/company/news/','type' => 'html'],
-    'rrost.ru'          => ['url' => 'https://rrost.ru/ru/press/events/','type' => 'html'],
+    // 'rrost.ru'        => ['url' => 'https://rrost.ru/ru/press/events/','type' => 'html'],
+    // 'newreg.ru'       => ['url' => 'https://www.newreg.ru/news/','type' => 'html'],
+    // 'profrc.ru'          => ['url' => 'https://profrc.ru/company/news/news-our/year/2022/','type' => 'html'],
+    'paritet.ru'          => ['url' => 'https://paritet.ru/all-news/','type' => 'html'],
+    
   ];
   
   $keywords = array_merge($words, $companies);
