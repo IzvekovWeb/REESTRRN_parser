@@ -51,9 +51,11 @@ function is_news_exist_bd($news){
 
   $dataArray = [
     'title' => $news['title'],
-    'site_link' => $news['site_url'], 
+    'link' => $news['link'], 
     'time' => $news['time']
   ];
+
+  // print_r($dataArray);
 
   $url = $BASE_URL . '/news/is_exists.php';
   $data = http_build_query($dataArray);

@@ -205,16 +205,16 @@ class News {
     
     function is_exists($keywords){
         $title = $keywords['title'];
-        $link = $keywords['site_link'];
+        $link = $keywords['link'];
         $time = $keywords['time'];
 
-        $query = "SELECT EXISTS(SELECT 1 FROM news as n WHERE title LIKE :title AND site_link LIKE :site_link AND time=:time)";
+        $query = "SELECT EXISTS(SELECT 1 FROM news as n WHERE title LIKE :title AND link LIKE :link AND time=:time)";
 
         $stmt = $this->conn->prepare($query);
 
         // привязка значений 
         $stmt->bindParam(":title", $title);
-        $stmt->bindParam(":site_link", $link);
+        $stmt->bindParam(":link", $link);
         $stmt->bindParam(":time", $time);
 
 

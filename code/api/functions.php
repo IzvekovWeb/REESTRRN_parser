@@ -1,6 +1,6 @@
 <?php 
 function time_format($time){
-  $date = date("Y-m-d");
+  $date = null;
   $months = [
       1 => 'января',
       2 => 'февраля',
@@ -15,10 +15,14 @@ function time_format($time){
       11 => 'ноября',
       12 => 'декабря'
     ];
-  if (count(explode(' ', $time)) == 3){
-      $explode_date = explode(' ', $time);
-      $month_num = array_search(mb_strtolower($explode_date[1]), $months);
-      $date = date("Y-m-d", strtotime($explode_date[0].'-'.$month_num.'-'.$explode_date[2]));
+  if (count(explode(' ', $time)) >= 3){
+    
+    $explode_date = explode(' ', $time);
+
+    $explode_date[2] = preg_replace('/[А-Яа-я]+/', '', $explode_date[2]);
+
+    $month_num = array_search(mb_strtolower($explode_date[1]), $months);
+    $date = date("Y-m-d", strtotime($explode_date[0].'-'.$month_num.'-'.$explode_date[2]));
   }else{
       try{
           $date = date("Y-m-d", strtotime($time));

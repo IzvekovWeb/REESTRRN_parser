@@ -44,10 +44,10 @@ $new_news = Array();
             // Отсеиваем уже добавленный\отправленные новости
             if ($is_news_exist == "true") {
 
-              echo "Такая новость уже есть - ".$one_news['title'] ."<br>";
+              echo "<br>" . "Такая новость уже есть - ".$one_news['title'] ."<br>";
 
             }else{
-              echo "Такой новости нет - ".$one_news['title'] ."<br>"; 
+              echo "<br>" . "Такой новости нет - ".$one_news['title'] ."<br>"; 
 
               if ($one_news != null) {
                 // Добавляем новость в бд
@@ -100,17 +100,18 @@ function start($words=[], $companies=[]){
   // Стартовые данные 
   // Позже будут в БД
   $urls = [
-    // 'aoreestr.ru'     => ['url' => 'https://aoreestr.ru/press','type' => 'html'],
-    // 'vrk.ru'          => ['url' => 'https://www.vrk.ru/news','type' => 'html'],
-    // 'mrz.ru'          => ['url' => 'http://mrz.ru/company/news/','type' => 'html'],
-    // 'rrost.ru'        => ['url' => 'https://rrost.ru/ru/press/events/','type' => 'html'],
-    // 'newreg.ru'       => ['url' => 'https://www.newreg.ru/news/','type' => 'html'],
-    // 'profrc.ru'          => ['url' => 'https://profrc.ru/company/news/news-our/year/2022/','type' => 'html'],
+    'aoreestr.ru'     => ['url' => 'https://aoreestr.ru/press','type' => 'html'],
+    'vrk.ru'          => ['url' => 'https://www.vrk.ru/news','type' => 'html'],
+    'mrz.ru'          => ['url' => 'http://mrz.ru/company/news/','type' => 'html'],
+    'rrost.ru'        => ['url' => 'https://rrost.ru/ru/press/events/','type' => 'html'],
+    'newreg.ru'       => ['url' => 'https://www.newreg.ru/news/','type' => 'html'],
+    'profrc.ru'          => ['url' => 'https://profrc.ru/company/news/news-our/year/2022/','type' => 'html'],
     'paritet.ru'          => ['url' => 'https://paritet.ru/all-news/','type' => 'html'],
     
   ];
   
   $keywords = array_merge($words, $companies);
+  
   // ------------------------- 
 
   $result_mas = ['message' =>'Данные для парсинга не были получены ', 'error' => true, 'result' => []];
