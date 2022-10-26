@@ -100,13 +100,14 @@ function start($words=[], $companies=[]){
   // Стартовые данные 
   // Позже будут в БД
   $urls = [
-    'aoreestr.ru'     => ['url' => 'https://aoreestr.ru/press','type' => 'html'],
-    'vrk.ru'          => ['url' => 'https://www.vrk.ru/news','type' => 'html'],
-    'mrz.ru'          => ['url' => 'http://mrz.ru/company/news/','type' => 'html'],
-    'rrost.ru'        => ['url' => 'https://rrost.ru/ru/press/events/','type' => 'html'],
-    'newreg.ru'       => ['url' => 'https://www.newreg.ru/news/','type' => 'html'],
-    'profrc.ru'          => ['url' => 'https://profrc.ru/company/news/news-our/year/2022/','type' => 'html'],
-    'paritet.ru'          => ['url' => 'https://paritet.ru/all-news/','type' => 'html'],
+    'aoreestr.ru'     => ['url' => 'https://aoreestr.ru/press','type' => 'html', 'curl' => false],
+    'vrk.ru'          => ['url' => 'https://www.vrk.ru/news','type' => 'html', 'curl' => false],
+    'mrz.ru'          => ['url' => 'http://mrz.ru/company/news/','type' => 'html', 'curl' => false],
+    'rrost.ru'        => ['url' => 'https://rrost.ru/ru/press/events/','type' => 'html', 'curl' => false],
+    'newreg.ru'       => ['url' => 'https://www.newreg.ru/news/','type' => 'html', 'curl' => false],
+    'profrc.ru'       => ['url' => 'https://profrc.ru/company/news/news-our/year/2022/','type' => 'html', 'curl' => false],
+    'paritet.ru'      => ['url' => 'https://paritet.ru/all-news/','type' => 'html', 'curl' => false],
+    'rtreg.ru'        => ['url' => 'https://rtreg.ru/posts', 'type' => 'html', 'curl' => true],
     
   ];
   
@@ -118,17 +119,16 @@ function start($words=[], $companies=[]){
 
   // Проходимся по всем сайтам
   foreach ($urls as $site => $url){
-    $html = null;
-    $json = null;
+    $data = null;
     
     echo $site. "<br>";
 
     // Выбираем параметры и способ запроса
-    if ($url['type'] == 'json'){
-      $json =  file_get_contents_curl($url['url']);
+    if ($url['curl']){
+      $data =  file_get_contents_curl($url['url']);
     } 
     else {
-      $html = file_get_contents($url['url']);
+      $data = file_get_contents($url['url']);
     }  
 
     $parser = new siteParser($site, $url, $keywords);
@@ -139,9 +139,9 @@ function start($words=[], $companies=[]){
     if($tags != null) {
 
       // Проверяем тип сайта html или JSON
-      if ($html !== null && $url['type'] == 'html') { 
+      if ($data !== null && $url['type'] == 'html') { 
 
-        $document_html = phpQuery::newDocument($html); 
+        $document_html = phpQuery::newDocument($data); 
         
         $parse_result = $parser->parse_HTML($document_html, $tags); 
         // dump($parse_result['result']);
@@ -161,8 +161,8 @@ function start($words=[], $companies=[]){
         }
         
       }
-      elseif ($json !== null  && $url['type'] == 'json'){ 
-        $parse_result = $parser->parse_JSON($json, $tags);
+      elseif ($data !== null  && $url['type'] == 'json'){ 
+        $parse_result = $parser->parse_JSON($data, $tags);
         if(!$parse_result['error']){
 
           echo 'Сайт спарсен успешно <br>';
@@ -185,10 +185,4 @@ function start($words=[], $companies=[]){
   return $result_mas;
 
 }// start()
-
-
- 
-
- 
-
 ?>

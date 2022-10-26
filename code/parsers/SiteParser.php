@@ -33,14 +33,18 @@ class siteParser {
 
         $article = pq($art);   
 
-        // dump($article);        
+        // dump($article);    
 
         if ($tags['link'] != null) {
           // Задаём ссылку на статью
-          if (strpos($article->find($tags['link'])->attr('href'), 'http') || strpos($article->find($tags['link'])->attr('href'), $this->site) ) {
-            $link = $article->find($tags['link'])->attr('href');
+          $href_text = $article->find($tags['link'])->attr('href');
+          if (strpos($href_text, 'http') || strpos($href_text, $this->site) ) {
+            $link = $href_text;
+          }elseif($href_text) {
+            $link = $this->site . $href_text;
           }elseif($tags['link'] == 'CURRENT') {
             $link = $article->attr('href');
+
           }else {
             $link = $this->site . $article->parents('a')->attr('href');
           }
@@ -69,24 +73,7 @@ class siteParser {
  
         dump($article_el); 
 
-        // Проверяем на наличие ключевых слов в заголовке или описании
-        if(!empty($article_el['title']) && !empty($article_el['link'])){ 
-
-          // foreach ($this->keywords as $key){ 
-            
-          //   // Если ключевое слово есть в заголовке или описании
-          //   if (stripos($article_el['title'], $key) !== false || stripos($article_el['desc'], $key) !== false){
- 
-          //     // Допускаем новость и записываем ключевое слово
-          //     $article_el['allow'] = true;
-          //     array_push($article_el['keywords'], $key);
-          //   }
-          // }
-
-          // Добавляем данные одной заметки в массив со всеми заметками
-
-          // dump($article_el); 
-
+        if(!empty($article_el['title']) && !empty($article_el['link'])){  
           array_push($values, $article_el);
         }
       }
@@ -115,14 +102,7 @@ class siteParser {
       foreach($json as $article){
         
         // dump($article);  
-        
-        $link = '';
-        if ($this->site == "streetinsider.com") {
-          $link = "https://www.streetinsider.com/dr/news.php?id=" . $article->{$tags['link']};
-        }
-        else {
-          $link = $article->{$tags['link']};
-        } 
+        $link = $article->{$tags['link']};
 
         // Отбираем нужные данные и заносим в массив
         $article_el = [
@@ -238,6 +218,16 @@ class siteParser {
         'time' => 'span.pir-news__date',
       ];
     }
+    elseif($site_name == 'rtreg.ru'){
+      $tags = [
+        'article' => 'div.posts__list > article.posts__item',
+        'title' => 'div > header > h4 > a',
+        'desc' => 'p',
+        'link' => 'div > header > h4 > a',
+        'time' => 'div > p',
+      ];
+    }
+
     return $tags;
   }
 }
