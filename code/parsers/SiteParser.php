@@ -63,7 +63,7 @@ class siteParser {
         // Отбираем нужные данные и заносим в массив
         $article_el = [
           'title'     => trim($article->find($tags['title'])->text()),
-          'desc'      => cutStr(trim($article->find($tags['desc'])->text()), 650),
+          'desc'      => cutStr(trim($article->find($tags['desc'])->clone()->children()->remove()->end()->text()), 650),
           'link'      => $link,
           'time'      => trim($time),
           'allow'     => false,
@@ -72,7 +72,7 @@ class siteParser {
           'site_name' => $this->site,
         ]; 
  
-        // dump($article_el); 
+        dump($article_el); 
 
         if(!empty($article_el['title']) && !empty($article_el['link'])){  
           array_push($values, $article_el);
@@ -244,6 +244,15 @@ class siteParser {
         'desc' => null,
         'link' => 'div.info-news > a.news-title',
         'time' => 'span.news-date-time',
+      ];
+    }
+    elseif($site_name == 'draga.ru'){
+      $tags = [
+        'article' => 'div.section-news-feed > div',
+        'title' => 'h6 > a',
+        'desc' => null,
+        'link' => 'h6 > a',
+        'time' => 'h8',
       ];
     }
 
