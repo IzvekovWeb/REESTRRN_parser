@@ -237,6 +237,15 @@ class siteParser {
         'time' => 'p.news-item > span.news-date-time',
       ];
     }
+    elseif($site_name == 'rostatus.ru'){
+      $tags = [
+        'article' => 'div.news-list > div.news-item',
+        'title' => 'div.info-news > a.news-title',
+        'desc' => null,
+        'link' => 'div.info-news > a.news-title',
+        'time' => 'span.news-date-time',
+      ];
+    }
 
     return $tags;
   }

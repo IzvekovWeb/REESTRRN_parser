@@ -108,7 +108,9 @@ function start($words=[], $companies=[]){
     // 'profrc.ru'       => ['url' => 'https://profrc.ru/company/news/news-our/year/2022/','type' => 'html', 'curl' => false],
     // 'paritet.ru'      => ['url' => 'https://paritet.ru/all-news/','type' => 'html', 'curl' => false],
     // 'rtreg.ru'        => ['url' => 'https://rtreg.ru/posts', 'type' => 'html', 'curl' => true],
-    'regkrc.ru'           => ['url' => 'https://regkrc.ru/news/', 'type' => 'html', 'curl' => false],
+    // 'regkrc.ru'       => ['url' => 'https://regkrc.ru/news/', 'type' => 'html', 'curl' => false],
+    // 'rostatus.ru'     => ['url' => 'https://rostatus.ru/about/news/', 'type' => 'html', 'curl' => false],
+    // ''           => ['url' => '', 'type' => 'html', 'curl' => false],
     
   ];
   
