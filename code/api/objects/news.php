@@ -3,7 +3,7 @@ class News {
 
     // подключение к базе данных и таблице 'newss' 
     private $conn;
-    private $table_name = "news";
+    private $table_name;
 
     // свойства объекта 
     public $id;
@@ -14,8 +14,13 @@ class News {
     public $time;
 
     // конструктор для соединения с базой данных 
-    public function __construct($db){
+    public function __construct($db, $DEBUG=true){
         $this->conn = $db;
+        if ($DEBUG) {
+            $this->table_name = "news_test";
+        } else {
+            $this->table_name = "news";
+        }
     }
 
     // метод read() - получение записей

@@ -9,3 +9,16 @@
 
 ## Парсер
 Путь newsParser/code/parsers/SiteParser.php
+
+
+
+<!-- # SQL 
+
+Обновить serial
+
+    ALTER SEQUENCE <seq> RESTART WITH 1;
+    UPDATE <table> SET <idcolumn>=nextval('<seq>');
+
+Посмотреть все SEQUENCEs
+
+    SELECT * FROM information_schema.sequences; -->

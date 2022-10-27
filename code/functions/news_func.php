@@ -3,7 +3,7 @@
 // Тут я разместил все функции связанные с новостями
 //======================================================================
 
-require_once('libs/Yandex/YToken.php');
+// require_once('libs/Yandex/YToken.php');
 
 $API_URL = "/code/api";
 $BASE_URL = "http://parser".$API_URL;

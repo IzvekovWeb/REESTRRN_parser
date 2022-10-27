@@ -91,7 +91,7 @@ $new_news = Array();
 //   sleep(10);
 // }
  
-file_put_contents('log.txt', 'Программа зевершена ' . date('"Y-m-d H:i:s"') . '<br><br>', FILE_APPEND);
+// file_put_contents('log.txt', 'Программа зевершена ' . date('"Y-m-d H:i:s"') . '<br><br>', FILE_APPEND);
 
 
 
@@ -100,17 +100,18 @@ function start($words=[], $companies=[]){
   // Стартовые данные 
   // Позже будут в БД
   $urls = [
-    // 'aoreestr.ru'     => ['url' => 'https://aoreestr.ru/press','type' => 'html', 'curl' => false],
-    // 'vrk.ru'          => ['url' => 'https://www.vrk.ru/news','type' => 'html', 'curl' => false],
-    // 'mrz.ru'          => ['url' => 'http://mrz.ru/company/news/','type' => 'html', 'curl' => false],
-    // 'rrost.ru'        => ['url' => 'https://rrost.ru/ru/press/events/','type' => 'html', 'curl' => false],
-    // 'newreg.ru'       => ['url' => 'https://www.newreg.ru/news/','type' => 'html', 'curl' => false],
-    // 'profrc.ru'       => ['url' => 'https://profrc.ru/company/news/news-our/year/2022/','type' => 'html', 'curl' => false],
-    // 'paritet.ru'      => ['url' => 'https://paritet.ru/all-news/','type' => 'html', 'curl' => false],
-    // 'rtreg.ru'        => ['url' => 'https://rtreg.ru/posts', 'type' => 'html', 'curl' => true],
-    // 'regkrc.ru'       => ['url' => 'https://regkrc.ru/news/', 'type' => 'html', 'curl' => false],
-    // 'rostatus.ru'     => ['url' => 'https://rostatus.ru/about/news/', 'type' => 'html', 'curl' => false],
-    // 'draga.ru'        => ['url' => 'https://draga.ru/topics/novosti/', 'type' => 'html', 'curl' => false],
+    'aoreestr.ru'     => ['url' => 'https://aoreestr.ru/press','type' => 'html', 'curl' => false],
+    'vrk.ru'          => ['url' => 'https://www.vrk.ru/news','type' => 'html', 'curl' => false],
+    'mrz.ru'          => ['url' => 'http://mrz.ru/company/news/','type' => 'html', 'curl' => false],
+    'rrost.ru'        => ['url' => 'https://rrost.ru/ru/press/events/','type' => 'html', 'curl' => false],
+    'newreg.ru'       => ['url' => 'https://www.newreg.ru/news/','type' => 'html', 'curl' => false],
+    'profrc.ru'       => ['url' => 'https://profrc.ru/company/news/news-our/year/2022/','type' => 'html', 'curl' => false],
+    'paritet.ru'      => ['url' => 'https://paritet.ru/all-news/','type' => 'html', 'curl' => false],
+    'rtreg.ru'        => ['url' => 'https://rtreg.ru/posts', 'type' => 'html', 'curl' => true],
+    'regkrc.ru'       => ['url' => 'https://regkrc.ru/news/', 'type' => 'html', 'curl' => false],
+    'rostatus.ru'     => ['url' => 'https://rostatus.ru/about/news/', 'type' => 'html', 'curl' => false],
+    'draga.ru'        => ['url' => 'https://draga.ru/topics/novosti/', 'type' => 'html', 'curl' => false],
+    // 'a-rnr.ru'           => ['url' => 'https://www.a-rnr.ru/news/', 'type' => 'html', 'curl' => true],
     // ''           => ['url' => '', 'type' => 'html', 'curl' => false],
     
   ];

@@ -60,9 +60,16 @@ class siteParser {
           $time = preg_replace('/[\t\n\r\s]+/', '', $time);
         };
 
+        $desc_text = trim($article->find($tags['desc'])->text());
+        if ($tags['title'] == "SHORT_DESC"){
+          $title = cutStr($desc_text, 150);
+        }else {
+          $title = trim($article->find($tags['title'])->text());
+        }
+
         // Отбираем нужные данные и заносим в массив
         $article_el = [
-          'title'     => trim($article->find($tags['title'])->text()),
+          'title'     => $title,
           'desc'      => cutStr(trim($article->find($tags['desc'])->clone()->children()->remove()->end()->text()), 650),
           'link'      => $link,
           'time'      => trim($time),
@@ -253,6 +260,24 @@ class siteParser {
         'desc' => null,
         'link' => 'h6 > a',
         'time' => 'h8',
+      ];
+    }
+    elseif($site_name == 'draga.ru'){
+      $tags = [
+        'article' => 'div.section-news-feed > div',
+        'title' => 'h6 > a',
+        'desc' => null,
+        'link' => 'h6 > a',
+        'time' => 'h8',
+      ];
+    }
+    elseif($site_name == 'a-rnr.ru'){
+      $tags = [
+        'article' => 'div.news-list > p.news-item',
+        'title' => 'SHORT_DESC',
+        'desc' => 'span',
+        'link' => null,
+        'time' => 'span.news-date-time',
       ];
     }
 
