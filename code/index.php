@@ -100,14 +100,15 @@ function start($words=[], $companies=[]){
   // Стартовые данные 
   // Позже будут в БД
   $urls = [
-    'aoreestr.ru'     => ['url' => 'https://aoreestr.ru/press','type' => 'html', 'curl' => false],
-    'vrk.ru'          => ['url' => 'https://www.vrk.ru/news','type' => 'html', 'curl' => false],
-    'mrz.ru'          => ['url' => 'http://mrz.ru/company/news/','type' => 'html', 'curl' => false],
-    'rrost.ru'        => ['url' => 'https://rrost.ru/ru/press/events/','type' => 'html', 'curl' => false],
-    'newreg.ru'       => ['url' => 'https://www.newreg.ru/news/','type' => 'html', 'curl' => false],
-    'profrc.ru'       => ['url' => 'https://profrc.ru/company/news/news-our/year/2022/','type' => 'html', 'curl' => false],
-    'paritet.ru'      => ['url' => 'https://paritet.ru/all-news/','type' => 'html', 'curl' => false],
-    'rtreg.ru'        => ['url' => 'https://rtreg.ru/posts', 'type' => 'html', 'curl' => true],
+    // 'aoreestr.ru'     => ['url' => 'https://aoreestr.ru/press','type' => 'html', 'curl' => false],
+    // 'vrk.ru'          => ['url' => 'https://www.vrk.ru/news','type' => 'html', 'curl' => false],
+    // 'mrz.ru'          => ['url' => 'http://mrz.ru/company/news/','type' => 'html', 'curl' => false],
+    // 'rrost.ru'        => ['url' => 'https://rrost.ru/ru/press/events/','type' => 'html', 'curl' => false],
+    // 'newreg.ru'       => ['url' => 'https://www.newreg.ru/news/','type' => 'html', 'curl' => false],
+    // 'profrc.ru'       => ['url' => 'https://profrc.ru/company/news/news-our/year/2022/','type' => 'html', 'curl' => false],
+    // 'paritet.ru'      => ['url' => 'https://paritet.ru/all-news/','type' => 'html', 'curl' => false],
+    // 'rtreg.ru'        => ['url' => 'https://rtreg.ru/posts', 'type' => 'html', 'curl' => true],
+    'regkrc.ru'           => ['url' => 'https://regkrc.ru/news/', 'type' => 'html', 'curl' => false],
     
   ];
   
@@ -144,7 +145,6 @@ function start($words=[], $companies=[]){
         $document_html = phpQuery::newDocument($data); 
         
         $parse_result = $parser->parse_HTML($document_html, $tags); 
-        // dump($parse_result['result']);
         
         if(!$parse_result['error']){
 

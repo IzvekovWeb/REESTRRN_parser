@@ -22,7 +22,7 @@ class siteParser {
     // Обёртка новостей
     $articles = $document->find($tags['article']);
     $values = Array();
-    
+
     // echo "Тег статьи: " . $tags['article'] . "<br>";
 
     if (!empty($articles)) {
@@ -33,9 +33,10 @@ class siteParser {
 
         $article = pq($art);   
 
-        // dump($article);    
+        // dump($article);   
 
         if ($tags['link'] != null) {
+
           // Задаём ссылку на статью
           $href_text = $article->find($tags['link'])->attr('href');
           if (strpos($href_text, 'http') || strpos($href_text, $this->site) ) {
@@ -71,7 +72,7 @@ class siteParser {
           'site_name' => $this->site,
         ]; 
  
-        dump($article_el); 
+        // dump($article_el); 
 
         if(!empty($article_el['title']) && !empty($article_el['link'])){  
           array_push($values, $article_el);
@@ -225,6 +226,15 @@ class siteParser {
         'desc' => 'p',
         'link' => 'div > header > h4 > a',
         'time' => 'div > p',
+      ];
+    }
+    elseif($site_name == 'regkrc.ru'){
+      $tags = [
+        'article' => 'div.news-list > div.row > div.news-block',
+        'title' => 'p.news-item',
+        'desc' => null,
+        'link' => 'p.news-item > a.podrobnee',
+        'time' => 'p.news-item > span.news-date-time',
       ];
     }
 
