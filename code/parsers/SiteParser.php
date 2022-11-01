@@ -79,7 +79,7 @@ class siteParser {
           'site_name' => $this->site,
         ]; 
  
-        dump($article_el); 
+        // dump($article_el); 
 
         if(!empty($article_el['title']) && !empty($article_el['link'])){  
           array_push($values, $article_el);

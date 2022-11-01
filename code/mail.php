@@ -8,7 +8,7 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
 
-function send_mail($news){
+function send_mail($news, $DEBUG=true){
     $mail = new PHPMailer();
     $mail->CharSet = 'UTF-8';
 
@@ -30,8 +30,9 @@ function send_mail($news){
     $mail->setFrom($yourEmail, 'Новостная рассылка');
 
     // кому - получатель письма
-    // $mail->addAddress('aizvekov@reestrrn.ru', 'Александр');  // кому
-    $mail->addAddress('reestr.parser@yandex.ru', 'Parser');  // кому
+        $mail->addAddress('reestr.parser@yandex.ru', 'Parser');
+        $mail->addAddress('aizvekov@reestrrn.ru', 'Извеков Александр Дмитриевич');
+        $mail->addAddress('mbushuev@reestrrn.ru', 'Бушуев Михаил Игоревич');
 
     $mail->Subject = 'Последние новости';  // тема письма
 

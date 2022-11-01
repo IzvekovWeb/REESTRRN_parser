@@ -10,6 +10,7 @@ require('libs/phpQuery/phpQuery.php');
 // include('../vendor/autoload.php'); //Подключаем библиотеку
 require('libs/telegram/TelegramBot.php');
 require('parsers/SiteParser.php');
+require('api/config/database.php');
  
 // file_put_contents('log.txt', 'Программа запущена ' . date('Y-m-d H:i:s') . '<br>', FILE_APPEND);
 

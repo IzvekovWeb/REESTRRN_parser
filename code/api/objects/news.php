@@ -1,7 +1,8 @@
 <?php
+
 class News {
 
-    // подключение к базе данных и таблице 'newss' 
+    // подключение к базе данных и таблице
     private $conn;
     private $table_name;
 
@@ -14,13 +15,9 @@ class News {
     public $time;
 
     // конструктор для соединения с базой данных 
-    public function __construct($db, $DEBUG=true){
+    public function __construct($db){
         $this->conn = $db;
-        if ($DEBUG) {
-            $this->table_name = "news_test";
-        } else {
-            $this->table_name = "news";
-        }
+        $this->table_name = "news";
     }
 
     // метод read() - получение записей
@@ -46,6 +43,7 @@ class News {
                         (title, time, link, description, site_link) 
                 VALUES (:title, :time, :link, :description, :site_link)";
 
+
       // подготовка запроса 
       $stmt = $this->conn->prepare($query);
     
@@ -56,7 +54,7 @@ class News {
       $stmt->bindParam(":site_link", $this->site_link); 
       $stmt->bindParam(":time", $this->time);
 
-
+     
       // выполняем запрос 
       if ($stmt->execute()) {
           return true;
@@ -205,9 +203,9 @@ class News {
         $title = $keywords['title'];
         $link = $keywords['link'];
         $time = $keywords['time'];
-
-        $query = "SELECT EXISTS(SELECT 1 FROM news as n WHERE title LIKE :title AND link LIKE :link AND time=:time)";
-
+        
+        $query = "SELECT EXISTS(SELECT 1 FROM ".$this->table_name." WHERE title LIKE :title AND link LIKE :link AND time=:time)";
+        
         $stmt = $this->conn->prepare($query);
 
         // привязка значений 
@@ -217,8 +215,7 @@ class News {
 
 
         $stmt->execute();
-       return $stmt;
+        return $stmt;
     }
-    
 }
 ?>

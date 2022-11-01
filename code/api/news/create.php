@@ -15,9 +15,9 @@ include_once '../objects/news.php';
 include_once '../functions.php';
 
 $database = new Database();
-$db = $database->getConnection($DEBUG);
+$db = $database->getConnection();
 
-$news = new News($db, $DEBUG);
+$news = new News($db);
  
 // получаем отправленные данные 
 $data = $_POST;

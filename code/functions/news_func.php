@@ -68,7 +68,6 @@ function is_news_exist_bd($news){
   ));
   $response = curl_exec($check_news_bd);
   curl_close($check_news_bd);
-
   return $response;
 }
 

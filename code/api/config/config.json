@@ -1,0 +1,28 @@
+{
+    "mode": "DEBUG",
+
+    "DEBUG": {
+        "database": {
+            "host": "127.0.0.1",
+            "db_name": "parser",
+            "username": "izvekov",
+            "password": 12345,
+
+            "tables": {
+                "news": "news_test"
+            }
+        }
+    },
+    "PROD": {
+        "database": {
+            "host": "127.0.0.1",
+            "db_name": "parser",
+            "username": "parser_user",
+            "password": 12345,
+
+            "tables": {
+                "news": "news"
+            }
+        }
+    }
+}
