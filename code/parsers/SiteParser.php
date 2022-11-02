@@ -298,6 +298,24 @@ class siteParser {
         'time' => 'a.news__link > div > time',
       ];
     }
+    elseif($site_name == 'zao-srk.ru'){
+      $tags = [
+        'article' => 'div.root-news-list > div.root-news-item',
+        'title' => 'a',
+        'desc' => null,
+        'link' => 'a',
+        'time' => 'div.date',
+      ];
+    }
+    elseif($site_name == 'intraco.ru'){
+      $tags = [
+        'article' => 'div.news  > div.item > div.row > div > div.text',
+        'title' => 'a.title',
+        'desc' => null,
+        'link' => 'a.title',
+        'time' => 'span.date',
+      ];
+    }
 
     return $tags;
   }
