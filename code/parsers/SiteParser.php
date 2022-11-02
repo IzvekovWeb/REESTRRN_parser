@@ -316,6 +316,42 @@ class siteParser {
         'time' => 'span.date',
       ];
     }
+    elseif($site_name == 'sineft.ru'){
+      $tags = [
+        'article' => 'div.news-items > a.news-item',
+        'title' => 'div.item > div.news-item-title',
+        'desc' => null,
+        'link' => 'CURRENT',
+        'time' => 'div.item > div.news-item-top > span.news-item-date',
+      ];
+    }
+    elseif($site_name == 'industria-reestr.ru'){
+      $tags = [
+        'article' => 'div.newsList > div.newsCard',
+        'title' => 'div.newsCardTitle > a',
+        'desc' => null,
+        'link' => 'div.newsCardTitle > a',
+        'time' => 'div.newsCardDate',
+      ];
+    }
+    elseif($site_name == 'servis-reestr.ru'){
+      $tags = [
+        'article' => 'div.n-list > div.n-item',
+        'title' => 'div.preview_text',
+        'desc' => null,
+        'link' => 'div.bottom_block > div.more > a',
+        'time' => 'div.bottom_block > div.date',
+      ];
+    }
+    elseif($site_name == 'earc.ru'){
+      $tags = [
+        'article' => 'div.er-news-cards-cnt > div.er-news-card',
+        'title' => 'div.er-news-card__content > a.er-news-card__title',
+        'desc' => null,
+        'link' => 'div.er-news-card__content > a.er-news-card__title',
+        'time' => 'div.er-news-card__content > div.er-news-card__date > span',
+      ];
+    }
 
     return $tags;
   }

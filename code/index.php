@@ -116,7 +116,11 @@ function start($words=[], $companies=[]){
     // 'vtbreg.ru'       => ['url' => 'https://www.vtbreg.ru/', 'type' => 'html', 'curl' => false],
     // 'reggarant.ru'    => ['url' => 'https://www.reggarant.ru/index.php/ru/novosti-kompanii', 'type' => 'html', 'curl' => false],
     // 'zao-srk.ru'      => ['url' => 'https://zao-srk.ru/novosti/', 'type' => 'html', 'curl' => false],
-    'intraco.ru'      => ['url' => 'https://intraco.ru/o-kompanii/sobyitiya/news/', 'type' => 'html', 'curl' => false],
+    // 'intraco.ru'      => ['url' => 'https://intraco.ru/o-kompanii/sobyitiya/news/', 'type' => 'html', 'curl' => false],
+    // 'sineft.ru'       => ['url' => 'https://sineft.ru/news/', 'type' => 'html', 'curl' => false],
+    // 'industria-reestr.ru'     => ['url' => 'https://www.industria-reestr.ru/novosti/', 'type' => 'html', 'curl' => false],
+    // 'servis-reestr.ru'   => ['url' => 'https://servis-reestr.ru/novosti/', 'type' => 'html', 'curl' => false],
+    'earc.ru'   => ['url' => 'https://www.earc.ru/novosti/', 'type' => 'html', 'curl' => false],
     
   ];
   
