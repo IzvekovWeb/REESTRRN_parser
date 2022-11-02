@@ -115,7 +115,7 @@ class Telegram {
         // }
         // $message .= PHP_EOL . PHP_EOL;
         if ($el['time'] != ''){
-          $message .= "<b>Время:</b> " . $el['time'] . "<br><br>";
+          $message .= "<b>Дата:</b> " . $el['time'] . "<br><br>";
         }else{
           $message .= "<b>Время отправки парсером:</b> " . date("Y-m-d H:i:s") . "<br><br>";
         }

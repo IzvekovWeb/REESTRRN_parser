@@ -79,7 +79,7 @@ class siteParser {
           'site_name' => $this->site,
         ]; 
  
-        // dump($article_el); 
+        dump($article_el); 
 
         if(!empty($article_el['title']) && !empty($article_el['link'])){  
           array_push($values, $article_el);
@@ -278,6 +278,15 @@ class siteParser {
         'desc' => 'span',
         'link' => null,
         'time' => 'span.news-date-time',
+      ];
+    }
+    elseif($site_name == 'vtbreg.ru/events'){
+      $tags = [
+        'article' => 'ul.news-clients > li',
+        'title' => 'div.client-box',
+        'desc' => 'div.client-box',
+        'link' => 'a',
+        'time' => 'div.client-box > em',
       ];
     }
 
