@@ -4,8 +4,11 @@
 // include('../../../vendor/autoload.php'); //Подключаем библиотеку
 //https://api.telegram.org/bot1364265656:AAFsxPuqB-jbsnftB0A8uajtWtC6fXkzSt8/setWebhook?url=https://test.newsparser.ru/code/libs/telegram/TelegramMessageHandler.php
 
+include('html.php');
+
 use Telegram\Bot\Api;
 use Telegram\Bot\Keyboard\Keyboard;
+
 
 
 class Telegram {
@@ -100,7 +103,7 @@ class Telegram {
   }
 
 
-  public static function create_message_HTML($mas)
+  public static function create_message_HTML_base($mas)
   {   
       $messages_arr = [];
       foreach ($mas as $el) {
@@ -127,11 +130,40 @@ class Telegram {
       } 
       return $messages_arr;
   }
+  function create_message_HTML($mas)
+  {   
+      global $html_head, $html_footer;
+
+      $messages_arr = [];
+      $messages_arr[] .= $html_head;
+
+      foreach ($mas as $el) {
+        $message = "<tr><td align='left'><p>";
+        $message .= "<b>Заголовок:</b> " . $el['title'] . "<br><br>";
+        if ($el['desc']){
+          $message .= "<b>Описание:</b> "  . $el['desc'] . "<br><br>";
+        }
+        $message .= "<b>Новость:</b> <a href='"  . $el['link'] . "'>ссылка</a>" . "<br><br>";
+        $message .= "<b>Сайт:</b> <a href='"  . $el['site_url'] . "'>" . $el['site_name'] ."</a>" . "<br><br>";
+        // $message .= "<b>Ключевые слова:</b> ";
+        // foreach ($el['keywords'] as $key){
+        //     $message .= $key . " ";
+        // }
+        // $message .= PHP_EOL . PHP_EOL;
+        if ($el['time'] != ''){
+          $message .= "<b>Дата:</b> " . $el['time'] . "<br><br>";
+        }else{
+          $message .= "<b>Время отправки парсером:</b> " . date("Y-m-d H:i:s") . "<br><br>";
+        }
+        $message .= '</p> <hr> </tr></td>';
+        
+        $messages_arr[] .= $message;
+      } 
+      $messages_arr[] .= $html_footer;
+      return $messages_arr;
+  }
 
 
 } 
-
-
-
 
 ?>
