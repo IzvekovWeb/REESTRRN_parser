@@ -106,7 +106,9 @@ class Telegram {
       foreach ($mas as $el) {
         $message = '';
         $message .= "<b>Заголовок:</b> " . $el['title'] . "<br><br>";
-        $message .= "<b>Описание:</b> "  . $el['desc'] . "<br><br>";
+        if ($el['desc']){
+          $message .= "<b>Описание:</b> "  . $el['desc'] . "<br><br>";
+        }
         $message .= "<b>Новость:</b> <a href='"  . $el['link'] . "'>ссылка</a>" . "<br><br>";
         $message .= "<b>Сайт:</b> <a href='"  . $el['site_url'] . "'>" . $el['site_name'] ."</a>" . "<br><br>";
         // $message .= "<b>Ключевые слова:</b> ";
