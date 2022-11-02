@@ -289,6 +289,15 @@ class siteParser {
         'time' => 'div.client-box > em',
       ];
     }
+    elseif($site_name == 'reggarant.ru'){
+      $tags = [
+        'article' => 'div.news-list-wrapper > div.row > div',
+        'title' => 'a.news__link > div > h2',
+        'desc' => null,
+        'link' => 'a.news__link',
+        'time' => 'a.news__link > div > time',
+      ];
+    }
 
     return $tags;
   }

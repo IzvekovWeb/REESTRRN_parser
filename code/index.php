@@ -113,8 +113,8 @@ function start($words=[], $companies=[]){
     // 'rostatus.ru'     => ['url' => 'https://rostatus.ru/about/news/', 'type' => 'html', 'curl' => false],
     // 'draga.ru'        => ['url' => 'https://draga.ru/topics/novosti/', 'type' => 'html', 'curl' => false],
     // 'a-rnr.ru'        => ['url' => 'https://www.a-rnr.ru/news/', 'type' => 'html', 'curl' => true],
-    'vtbreg.ru'      => ['url' => 'https://www.vtbreg.ru/', 'type' => 'html', 'curl' => false],
-    // ''      => ['url' => '', 'type' => 'html', 'curl' => false],
+    // 'vtbreg.ru'      => ['url' => 'https://www.vtbreg.ru/', 'type' => 'html', 'curl' => false],
+    'reggarant.ru'      => ['url' => 'https://www.reggarant.ru/index.php/ru/novosti-kompanii', 'type' => 'html', 'curl' => false],
     
   ];
   
