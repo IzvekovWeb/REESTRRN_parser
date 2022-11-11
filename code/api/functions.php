@@ -23,11 +23,20 @@ function time_format($time){
 
     $month_num = array_search(mb_strtolower($explode_date[1]), $months);
     $date = date("Y-m-d", strtotime($explode_date[0].'-'.$month_num.'-'.$explode_date[2]));
+  }elseif (count(explode(' ', $time)) == 2) {
+    try {
+      $explode_date = explode(' ', $time);
+      $month_num = array_search(mb_strtolower($explode_date[1]), $months);
+      $date = date("Y-m-d", strtotime($explode_date[0].'-'.$month_num.'-'.date("Y")));
+    }
+    catch (Exception $e){
+      echo '1 Ошибка преобразования даты. Запишем 1970-1-1';
+    }
   }else{
       try{
           $date = date("Y-m-d", strtotime($time));
       }catch(Exception $e){
-          echo 'Ошибка преобразования даты. Запишем 1970-1-1';
+          echo '2 Ошибка преобразования даты. Запишем 1970-1-1';
       }
   }
   return $date;

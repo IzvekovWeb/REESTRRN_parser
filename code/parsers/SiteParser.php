@@ -69,8 +69,8 @@ class siteParser {
 
         // Отбираем нужные данные и заносим в массив
         $article_el = [
-          'title'     => $title,
-          'desc'      => cutStr(trim($article->find($tags['desc'])->clone()->children()->remove()->end()->text()), 650),
+          'title'     => mb_convert_encoding($title, 'UTF-8'),
+          'desc'      => mb_convert_encoding(cutStr(trim($article->find($tags['desc'])->clone()->children()->remove()->end()->text()), 650), "UTF-8"),
           'link'      => $link,
           'time'      => trim($time),
           'allow'     => false,
@@ -232,7 +232,7 @@ class siteParser {
         'title' => 'div > header > h4 > a',
         'desc' => 'p',
         'link' => 'div > header > h4 > a',
-        'time' => 'div > p',
+        'time' => 'div.show-for-large > time',
       ];
     }
     elseif($site_name == 'regkrc.ru'){
@@ -350,6 +350,24 @@ class siteParser {
         'desc' => null,
         'link' => 'div.er-news-card__content > a.er-news-card__title',
         'time' => 'div.er-news-card__content > div.er-news-card__date > span',
+      ];
+    }
+    elseif($site_name == 'crc-reg.com'){
+      $tags = [
+        'article' => 'div.news-list > div.news-list__item',
+        'title' => 'div.news-list__info > a.news-list__ttl',
+        'desc' => 'div.news-list__info > div.news-list__preview',
+        'link' => 'div.news-list__info > a.news-list__ttl',
+        'time' => 'div.news-list__date',
+      ];
+    }
+    elseif($site_name == 'srmfc.ru'){
+      $tags = [
+        'article' => 'table.views-table > tbody > tr',
+        'title' => 'td.views-field-title-1 > a',
+        'desc' => null,
+        'link' => 'td.views-field-title-1 > a',
+        'time' => 'td.views-field-created',
       ];
     }
 
