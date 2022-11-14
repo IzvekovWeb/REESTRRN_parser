@@ -370,6 +370,15 @@ class siteParser {
         'time' => 'td.views-field-created',
       ];
     }
+    elseif($site_name == 'rrcentre.ru'){
+      $tags = [
+        'article' => 'div.news-list > p.news-item',
+        'title' => 'a.news-title',
+        'desc' => '',
+        'link' => 'a.news-title',
+        'time' => 'span.news-date-time',
+      ];
+    }
 
     return $tags;
   }
