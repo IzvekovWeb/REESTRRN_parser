@@ -17,6 +17,7 @@ class News {
     // конструктор для соединения с базой данных 
     public function __construct($db){
         $this->conn = $db;
+        // $this->table_name = "news_test";
         $this->table_name = "news";
     }
 

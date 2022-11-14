@@ -31,7 +31,7 @@ function send_mail($news, $DEBUG=true){
 
     // кому - получатель письма
         $mail->addAddress('reestr.parser@yandex.ru', 'Parser');
-        $mail->addAddress('aizvekov@reestrrn.ru', 'Извеков Александр Дмитриевич');
+        // $mail->addAddress('aizvekov@reestrrn.ru', 'Извеков Александр Дмитриевич');
         $mail->addAddress('mbushuev@reestrrn.ru', 'Бушуев Михаил Игоревич');
 
     $mail->Subject = 'Последние новости';  // тема письма

@@ -379,6 +379,24 @@ class siteParser {
         'time' => 'span.news-date-time',
       ];
     }
+    elseif($site_name == 'registrator-rekom.ru'){
+      $tags = [
+        'article' => 'div.list > p.item',
+        'title' => 'a',
+        'desc' => null,
+        'link' => 'a',
+        'time' => 'span',
+      ];
+    }
+    elseif($site_name == 'oboronregistr.ru'){
+      $tags = [
+        'article' => 'div.wrapper > article',
+        'title' => 'h3 > a',
+        'desc' => 'span.info',
+        'link' => 'h3 > a',
+        'time' => 'span.date',
+      ];
+    }
 
     return $tags;
   }

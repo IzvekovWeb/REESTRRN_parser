@@ -101,31 +101,32 @@ function start($words=[], $companies=[]){
   // Стартовые данные 
   // Позже будут в БД
   $urls = [
-    // 'aoreestr.ru'     => ['url' => 'https://aoreestr.ru/press','type' => 'html', 'curl' => false],
-    // 'vrk.ru'          => ['url' => 'https://www.vrk.ru/news','type' => 'html', 'curl' => false],
-    // 'mrz.ru'          => ['url' => 'http://mrz.ru/company/news/','type' => 'html', 'curl' => false],
-    // 'rrost.ru'        => ['url' => 'https://rrost.ru/ru/press/events/','type' => 'html', 'curl' => false],
-    // 'newreg.ru'       => ['url' => 'https://www.newreg.ru/news/','type' => 'html', 'curl' => false],
-    // 'profrc.ru'       => ['url' => 'https://profrc.ru/company/news/news-our/year/2022/','type' => 'html', 'curl' => false],
-    // 'paritet.ru'      => ['url' => 'https://paritet.ru/all-news/','type' => 'html', 'curl' => false],
-    // 'rtreg.ru'        => ['url' => 'https://rtreg.ru/posts', 'type' => 'html', 'curl' => true],
-    // 'regkrc.ru'       => ['url' => 'https://regkrc.ru/news/', 'type' => 'html', 'curl' => false],
-    // 'rostatus.ru'     => ['url' => 'https://rostatus.ru/about/news/', 'type' => 'html', 'curl' => false],
-    // 'draga.ru'        => ['url' => 'https://draga.ru/topics/novosti/', 'type' => 'html', 'curl' => false],
-    // 'a-rnr.ru'        => ['url' => 'https://www.a-rnr.ru/news/', 'type' => 'html', 'curl' => true],
-    // 'vtbreg.ru'       => ['url' => 'https://www.vtbreg.ru/', 'type' => 'html', 'curl' => false],
-    // 'reggarant.ru'    => ['url' => 'https://www.reggarant.ru/index.php/ru/novosti-kompanii', 'type' => 'html', 'curl' => false],
-    // 'zao-srk.ru'      => ['url' => 'https://zao-srk.ru/novosti/', 'type' => 'html', 'curl' => false],
-    // 'intraco.ru'      => ['url' => 'https://intraco.ru/o-kompanii/sobyitiya/news/', 'type' => 'html', 'curl' => false],
-    // 'sineft.ru'       => ['url' => 'https://sineft.ru/news/', 'type' => 'html', 'curl' => false],
-    // 'industria-reestr.ru'     => ['url' => 'https://www.industria-reestr.ru/novosti/', 'type' => 'html', 'curl' => false],
-    // 'servis-reestr.ru'        => ['url' => 'https://servis-reestr.ru/novosti/', 'type' => 'html', 'curl' => false],
-    // 'earc.ru'         => ['url' => 'https://www.earc.ru/novosti/', 'type' => 'html', 'curl' => false],
-    // 'crc-reg.com'     => ['url' => 'https://crc-reg.com/info/', 'type' => 'html', 'curl' => false],
-    // 'srmfc.ru'        => ['url' => 'https://srmfc.ru/news_all', 'type' => 'html', 'curl' => false], // проблемы с кодировкой
-    'rrcentre.ru'         => ['url' => 'https://rrcentre.ru/about/news/', 'type' => 'html', 'curl' => false],
+    'aoreestr.ru'     => ['url' => 'https://aoreestr.ru/press','type' => 'html', 'curl' => false],
+    'vrk.ru'          => ['url' => 'https://www.vrk.ru/news','type' => 'html', 'curl' => false],
+    'mrz.ru'          => ['url' => 'http://mrz.ru/company/news/','type' => 'html', 'curl' => false],
+    'rrost.ru'        => ['url' => 'https://rrost.ru/ru/press/events/','type' => 'html', 'curl' => false],
+    'newreg.ru'       => ['url' => 'https://www.newreg.ru/news/','type' => 'html', 'curl' => false],
+    'profrc.ru'       => ['url' => 'https://profrc.ru/company/news/news-our/year/2022/','type' => 'html', 'curl' => false],
+    'paritet.ru'      => ['url' => 'https://paritet.ru/all-news/','type' => 'html', 'curl' => false],
+    'rtreg.ru'        => ['url' => 'https://rtreg.ru/posts', 'type' => 'html', 'curl' => true],
+    'regkrc.ru'       => ['url' => 'https://regkrc.ru/news/', 'type' => 'html', 'curl' => false],
+    'rostatus.ru'     => ['url' => 'https://rostatus.ru/about/news/', 'type' => 'html', 'curl' => false],
+    'draga.ru'        => ['url' => 'https://draga.ru/topics/novosti/', 'type' => 'html', 'curl' => false],
+    'a-rnr.ru'        => ['url' => 'https://www.a-rnr.ru/news/', 'type' => 'html', 'curl' => true],
+    'vtbreg.ru'       => ['url' => 'https://www.vtbreg.ru/', 'type' => 'html', 'curl' => false],
+    'reggarant.ru'    => ['url' => 'https://www.reggarant.ru/index.php/ru/novosti-kompanii', 'type' => 'html', 'curl' => false],
+    'zao-srk.ru'      => ['url' => 'https://zao-srk.ru/novosti/', 'type' => 'html', 'curl' => false],
+    'intraco.ru'      => ['url' => 'https://intraco.ru/o-kompanii/sobyitiya/news/', 'type' => 'html', 'curl' => false],
+    'sineft.ru'       => ['url' => 'https://sineft.ru/news/', 'type' => 'html', 'curl' => false],
+    'industria-reestr.ru'     => ['url' => 'https://www.industria-reestr.ru/novosti/', 'type' => 'html', 'curl' => false],
+    'servis-reestr.ru'        => ['url' => 'https://servis-reestr.ru/novosti/', 'type' => 'html', 'curl' => false],
+    'earc.ru'         => ['url' => 'https://www.earc.ru/novosti/', 'type' => 'html', 'curl' => false],
+    'crc-reg.com'     => ['url' => 'https://crc-reg.com/info/', 'type' => 'html', 'curl' => false],
+    'rrcentre.ru'     => ['url' => 'https://rrcentre.ru/about/news/', 'type' => 'html', 'curl' => false],
+    'registrator-rekom.ru'    => ['url' => 'http://registrator-rekom.ru/news/', 'type' => 'html', 'curl' => false],
+    'oboronregistr.ru'        => ['url' => 'https://oboronregistr.ru/category/%d0%bd%d0%be%d0%b2%d0%be%d1%81%d1%82%d0%b8/', 'type' => 'html', 'curl' => false],
     
-
+    // 'srmfc.ru'        => ['url' => 'https://srmfc.ru/news_all', 'type' => 'html', 'curl' => false], // проблемы с кодировкой
   ];
   
   $keywords = array_merge($words, $companies);
