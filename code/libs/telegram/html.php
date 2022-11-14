@@ -341,7 +341,10 @@ body {
                <table width='100%' cellspacing='0' cellpadding='0'>
                  <tr>
                   <td width='900' valign='top' align='center'>
-                   <table width='100%' cellspacing='0' cellpadding='0' role='presentation'>";
+                   <table width='100%' cellspacing='0' cellpadding='0' role='presentation'>
+				   <thead width='100%' bgcolor='#2cb543' align='center' style='color=#ffffff;font-size:24px margin-bottom: 20px;'>
+				   <tr><td height='70' color='#ffffff' style='color: #ffffff;font-size: 26px;'>Новостная рассылка за ". date('d.m.Y') ."</td></tr>
+				   </thead>";
 
 $html_footer = "</table></td>
                  </tr>
