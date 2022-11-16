@@ -342,9 +342,12 @@ body {
                  <tr>
                   <td width='900' valign='top' align='center'>
                    <table width='100%' cellspacing='0' cellpadding='0' role='presentation'>
-				   <thead width='100%' bgcolor='#2cb543' align='center' style='color=#ffffff;font-size:24px margin-bottom: 20px;'>
-				   <tr><td height='70' color='#ffffff' style='color: #ffffff;font-size: 26px;'>Новостная рассылка за ". date('d.m.Y') ."</td></tr>
-				   </thead>";
+				   <tr width='100%' bgcolor='#2cb543' align='center' style='color=#ffffff;font-size:24px'>
+				   <td height='70' color='#ffffff' style='color: #ffffff;font-size: 26px;'>Новостная рассылка за ". date('d.m.Y') ."</td>
+				   </tr>
+				   <tr width='100%' bgcolor='#2cb543' align='center' style='color=#ffffff;font-size:12px;'>
+				   <td height='25' color='#ffffff' style='color: #ffffff;font-size: 12px;'>новости собраны в ". date('H:i:s') ."</td>
+				   </tr>";
 
 $html_footer = "</table></td>
                  </tr>

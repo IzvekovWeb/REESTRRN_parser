@@ -280,7 +280,7 @@ class siteParser {
         'time' => 'span.news-date-time',
       ];
     }
-    elseif($site_name == 'vtbreg.ru/events'){
+    elseif($site_name == 'vtbreg.ru'){
       $tags = [
         'article' => 'ul.news-clients > li',
         'title' => 'div.client-box',
